@@ -1,13 +1,15 @@
 import {
   Badge,
+  Box,
   Button,
   Container,
   Group,
   Stack,
+  Switch,
   Text,
   Title
 } from "@mantine/core";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import dyesData from "./data/dyes.json";
 import GuessInput from "./components/GuessInput";
 import GuessRow from "./components/GuessRow";
@@ -20,7 +22,7 @@ import {
   formatShareGrid,
   selectDailyDye
 } from "./lib/game";
-import { loadGameState, saveGameState } from "./lib/storage";
+import { clearGameState, loadGameState, saveGameState } from "./lib/storage";
 import type { Dye, GameStatus, Guess } from "./types";
 
 const dyes = dyesData as Dye[];
@@ -36,7 +38,7 @@ const getRandomDye = (list: Dye[]): Dye => {
 };
 
 const App = () => {
-  const dateKey = getChicagoDateKey();
+  const [dateKey] = useState(getChicagoDateKey);
   const dailyTarget = useMemo(() => selectDailyDye(dyes, dateKey), [dateKey]);
   const [mode, setMode] = useState<"daily" | "practice">("daily");
   const [target, setTarget] = useState<Dye>(dailyTarget);
@@ -45,8 +47,10 @@ const App = () => {
   const [selection, setSelection] = useState("");
   const [error, setError] = useState("");
   const [showResults, setShowResults] = useState(false);
+  const hydratedRef = useRef(false);
 
   useEffect(() => {
+    hydratedRef.current = false;
     if (mode !== "daily") {
       return;
     }
@@ -60,10 +64,11 @@ const App = () => {
       setStatus("playing");
     }
     setSelection("");
+    hydratedRef.current = true;
   }, [mode, dateKey, dailyTarget]);
 
   useEffect(() => {
-    if (mode !== "daily") {
+    if (mode !== "daily" || !hydratedRef.current) {
       return;
     }
     saveGameState(dateKey, { dateKey, guesses, status });
@@ -85,10 +90,42 @@ const App = () => {
     setShowResults(false);
   };
 
+  const resetPractice = () => {
+    setTarget(getRandomDye(dyes));
+    setGuesses([]);
+    setStatus("playing");
+    setSelection("");
+    setError("");
+    setShowResults(false);
+  };
+
   const returnToDaily = () => {
     setMode("daily");
     setShowResults(false);
   };
+
+  const resetDaily = () => {
+    clearGameState(dateKey);
+    setGuesses([]);
+    setStatus("playing");
+    setSelection("");
+    setError("");
+    setShowResults(false);
+    hydratedRef.current = true;
+    saveGameState(dateKey, { dateKey, guesses: [], status: "playing" });
+  };
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    const adminApi = {
+      resetDaily,
+      resetPractice: resetPractice
+    };
+    (window as typeof window & { __dyeleAdmin?: typeof adminApi }).__dyeleAdmin =
+      adminApi;
+  }, [dateKey]);
 
   const handleSubmit = () => {
     const trimmedSelection = selection.trim();
@@ -96,7 +133,10 @@ const App = () => {
       setError("Pick a dye before submitting.");
       return;
     }
-    const guessDye = dyes.find((dye) => dye.displayName === trimmedSelection);
+    const normalizedSelection = trimmedSelection.toLowerCase();
+    const guessDye = dyes.find(
+      (dye) => dye.displayName.toLowerCase() === normalizedSelection
+    );
     if (!guessDye) {
       setError("Choose a dye from the list.");
       return;
@@ -109,14 +149,14 @@ const App = () => {
     const nextGuesses = [...guesses, { dyeId: guessDye.id, feedback }];
     const didWin = guessDye.id === target.id;
     const didLose = !didWin && nextGuesses.length >= MAX_ATTEMPTS;
+    const nextStatus: GameStatus = didWin ? "won" : didLose ? "lost" : "playing";
 
     setGuesses(nextGuesses);
     setSelection("");
     setError("");
-    if (didWin) {
-      setStatus("won");
-    } else if (didLose) {
-      setStatus("lost");
+    setStatus(nextStatus);
+    if (mode === "daily") {
+      saveGameState(dateKey, { dateKey, guesses: nextGuesses, status: nextStatus });
     }
   };
 
@@ -135,18 +175,27 @@ const App = () => {
     }
   };
 
-  const orderedGuesses = [...guesses].reverse().map((guess) => ({
-    guess,
-    dyeName: dyes.find((dye) => dye.id === guess.dyeId)?.displayName
-  }));
+  const orderedGuesses = [...guesses].reverse().map((guess) => {
+    const dye = dyes.find((item) => item.id === guess.dyeId);
+    return {
+      guess,
+      dyeName: dye?.displayName,
+      colorHex: dye?.colorHex
+    };
+  });
 
   const isLocked = status !== "playing";
   const remainingAttempts = Math.max(0, MAX_ATTEMPTS - guesses.length);
 
   return (
-    <Container size="md" py={48}>
-      <Stack gap="xl">
-        <Stack gap="sm">
+    <Box style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      <Container
+        size="md"
+        py={48}
+        style={{ flex: 1, display: "flex", flexDirection: "column" }}
+      >
+        <Stack gap="xl" style={{ flex: 1 }}>
+          <Stack gap="sm">
           <Text
             size="xs"
             tt="uppercase"
@@ -178,6 +227,7 @@ const App = () => {
 
         <GuessInput
           dyes={dyes}
+          guessedIds={guesses.map((guess) => guess.dyeId)}
           value={selection}
           onChange={setSelection}
           onSubmit={handleSubmit}
@@ -185,33 +235,48 @@ const App = () => {
           error={error}
         />
 
-        <Stack gap="md">
-          <Strikes remaining={remainingAttempts} total={MAX_ATTEMPTS} />
-          {orderedGuesses.map((row, index) => (
-            <GuessRow
-              key={`${row.guess.dyeId}-${index}`}
-              index={guesses.length - index}
-              guess={row.guess}
-              displayName={row.dyeName}
-            />
-          ))}
+          <Stack gap="md">
+            <Strikes remaining={remainingAttempts} total={MAX_ATTEMPTS} />
+            {orderedGuesses.map((row, index) => (
+              <GuessRow
+                key={`${row.guess.dyeId}-${index}`}
+                index={guesses.length - index}
+                guess={row.guess}
+                displayName={row.dyeName}
+                colorHex={row.colorHex}
+              />
+            ))}
+          </Stack>
+
+          <Group justify="space-between" align="center" wrap="wrap">
+            <Box>
+              {mode === "daily" ? <Countdown /> : null}
+            </Box>
+            <Group align="center" gap="sm" wrap="wrap">
+              <Switch
+                checked={mode === "practice"}
+                onChange={(event) =>
+                  event.currentTarget.checked ? startPractice() : returnToDaily()
+                }
+                label="Practice mode"
+                size="sm"
+              />
+              <Button
+                variant="outline"
+                color="dark"
+                onClick={resetPractice}
+                size="sm"
+                style={{
+                  visibility: mode === "practice" ? "visible" : "hidden"
+                }}
+              >
+                Reset practice
+              </Button>
+            </Group>
+          </Group>
         </Stack>
 
-        <Group justify="space-between" wrap="wrap">
-          {mode === "daily" ? <Countdown /> : null}
-          <Group>
-            {mode === "practice" ? (
-              <Button variant="outline" color="dark" onClick={returnToDaily}>
-                Return to daily
-              </Button>
-            ) : null}
-            <Button variant="outline" color="dark" onClick={startPractice}>
-              Practice
-            </Button>
-          </Group>
-        </Group>
-
-        <Group justify="space-between" wrap="wrap">
+        <Group justify="space-between" wrap="wrap" mt="auto" pt="xl">
           <Text size="sm" c="dimmed">
             A ByteSrc project
           </Text>
@@ -238,8 +303,8 @@ const App = () => {
             isDaily={mode === "daily"}
           />
         ) : null}
-      </Stack>
-    </Container>
+      </Container>
+    </Box>
   );
 };
 

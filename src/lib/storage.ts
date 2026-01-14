@@ -26,3 +26,10 @@ export const saveGameState = (dateKey: string, state: GameState): void => {
     JSON.stringify(state)
   );
 };
+
+export const clearGameState = (dateKey: string): void => {
+  if (typeof window === "undefined") {
+    return;
+  }
+  window.localStorage.removeItem(`${STORAGE_PREFIX}${dateKey}`);
+};

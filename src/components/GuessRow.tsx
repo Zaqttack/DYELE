@@ -1,4 +1,4 @@
-import { Group, Paper, SimpleGrid, Text } from "@mantine/core";
+import { Box, Group, Paper, SimpleGrid, Text } from "@mantine/core";
 import AttributeTile from "./AttributeTile";
 import { ATTRIBUTE_META } from "../lib/game";
 import type { Guess } from "../types";
@@ -7,9 +7,10 @@ type GuessRowProps = {
   index: number;
   guess?: Guess;
   displayName?: string;
+  colorHex?: string;
 };
 
-const GuessRow = ({ index, guess, displayName }: GuessRowProps) => {
+const GuessRow = ({ index, guess, displayName, colorHex }: GuessRowProps) => {
   const feedbackMap = new Map(
     guess?.feedback.map((item) => [item.key, item.value])
   );
@@ -19,9 +20,20 @@ const GuessRow = ({ index, guess, displayName }: GuessRowProps) => {
         <Text size="xs" tt="uppercase" fw={700} c="dimmed" style={{ letterSpacing: "0.2em" }}>
           Guess {index}
         </Text>
-        <Text size="lg" fw={600} ff="Fraunces, serif">
-          {displayName ?? "—"}
-        </Text>
+        <Group gap="xs">
+          <Box
+            w={12}
+            h={12}
+            style={{
+              borderRadius: 999,
+              border: "1px solid rgba(18, 17, 23, 0.15)",
+              backgroundColor: colorHex ?? "#d0d0d4"
+            }}
+          />
+          <Text size="lg" fw={600} ff="Fraunces, serif">
+            {displayName ?? "—"}
+          </Text>
+        </Group>
       </Group>
       <SimpleGrid cols={{ base: 2, md: 5 }} spacing="sm">
         {ATTRIBUTE_META.map((item) => (

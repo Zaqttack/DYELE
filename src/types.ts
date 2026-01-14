@@ -40,6 +40,7 @@ export type Dye = {
   id: string;
   displayName: string;
   codeName?: string;
+  colorHex?: string;
   colorFamily: ColorFamily;
   usageTier: Tier;
   riskFlag: RiskFlag;

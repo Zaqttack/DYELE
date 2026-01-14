@@ -59,9 +59,11 @@ const App = () => {
     if (saved) {
       setGuesses(saved.guesses);
       setStatus(saved.status);
+      setShowResults(saved.status !== "playing");
     } else {
       setGuesses([]);
       setStatus("playing");
+      setShowResults(false);
     }
     setSelection("");
     hydratedRef.current = true;
@@ -186,6 +188,7 @@ const App = () => {
 
   const isLocked = status !== "playing";
   const remainingAttempts = Math.max(0, MAX_ATTEMPTS - guesses.length);
+  const canReopenResults = status !== "playing" && !showResults;
 
   return (
     <Box style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
@@ -236,7 +239,22 @@ const App = () => {
         />
 
           <Stack gap="md">
-            <Strikes remaining={remainingAttempts} total={MAX_ATTEMPTS} />
+            <Strikes
+              remaining={remainingAttempts}
+              total={MAX_ATTEMPTS}
+              action={
+                canReopenResults ? (
+                  <Button
+                    variant="light"
+                    color="dark"
+                    onClick={() => setShowResults(true)}
+                    size="sm"
+                  >
+                    View results
+                  </Button>
+                ) : null
+              }
+            />
             {orderedGuesses.map((row, index) => (
               <GuessRow
                 key={`${row.guess.dyeId}-${index}`}
@@ -252,7 +270,7 @@ const App = () => {
             <Box>
               {mode === "daily" ? <Countdown /> : null}
             </Box>
-            <Group align="center" gap="sm" wrap="wrap">
+            <Group align="center" gap="sm" wrap="nowrap">
               <Switch
                 checked={mode === "practice"}
                 onChange={(event) =>
@@ -261,17 +279,20 @@ const App = () => {
                 label="Practice mode"
                 size="sm"
               />
-              <Button
-                variant="outline"
-                color="dark"
-                onClick={resetPractice}
-                size="sm"
-                style={{
-                  visibility: mode === "practice" ? "visible" : "hidden"
-                }}
-              >
-                Reset practice
-              </Button>
+              <Box style={{ minWidth: 140 }}>
+                <Button
+                  variant="outline"
+                  color="dark"
+                  onClick={resetPractice}
+                  size="sm"
+                  fullWidth
+                  style={{
+                    visibility: mode === "practice" ? "visible" : "hidden"
+                  }}
+                >
+                  Reset practice
+                </Button>
+              </Box>
             </Group>
           </Group>
         </Stack>

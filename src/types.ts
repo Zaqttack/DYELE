@@ -61,4 +61,5 @@ export type GameState = {
   dateKey: string;
   guesses: Guess[];
   status: GameStatus;
+  resultsDismissed?: boolean;
 };

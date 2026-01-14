@@ -1,0 +1,123 @@
+[
+  {
+    "id": "blue-1",
+    "displayName": "Blue 1",
+    "codeName": "FD&C Blue No. 1 (Brilliant Blue FCF)",
+    "colorFamily": "blue",
+    "usageTier": "medium",
+    "riskFlag": "caution",
+    "regulatoryStatus": "allowed",
+    "commonCategories": ["beverages", "candy", "cereal", "baked", "dairy"],
+    "facts": [
+      "Used in many baked goods, beverages, dessert mixes, candies, cereals, and dairy treats.",
+      "CSPI notes key animal studies did not find toxicity, but flags other findings as raising questions."
+    ],
+    "sources": ["CSPI Food Dyes: A Rainbow of Risks (2010), Blue 1 section"]
+  },
+  {
+    "id": "blue-2",
+    "displayName": "Blue 2",
+    "codeName": "FD&C Blue No. 2 (Indigotine / Indigo Carmine)",
+    "colorFamily": "blue",
+    "usageTier": "low",
+    "riskFlag": "caution",
+    "regulatoryStatus": "allowed",
+    "commonCategories": ["candy", "cereal", "baked", "snacks"],
+    "facts": ["Another FDA-certified blue dye discussed in the CSPI report."],
+    "sources": ["CSPI Food Dyes: A Rainbow of Risks (2010), Blue 2 section"]
+  },
+  {
+    "id": "green-3",
+    "displayName": "Green 3",
+    "codeName": "FD&C Green No. 3 (Fast Green FCF)",
+    "colorFamily": "green",
+    "usageTier": "low",
+    "riskFlag": "caution",
+    "regulatoryStatus": "allowed",
+    "commonCategories": ["candy", "cereal", "baked", "snacks"],
+    "facts": ["FDA-certified green dye discussed in the CSPI report."],
+    "sources": ["CSPI Food Dyes: A Rainbow of Risks (2010), Green 3 section"]
+  },
+  {
+    "id": "red-3",
+    "displayName": "Red 3",
+    "codeName": "FD&C Red No. 3 (Erythrosine)",
+    "colorFamily": "red",
+    "usageTier": "low",
+    "riskFlag": "high",
+    "regulatoryStatus": "warning",
+    "commonCategories": ["candy", "baked", "snacks"],
+    "facts": ["CSPI discusses carcinogenicity concerns associated with Red 3 in animal studies."],
+    "sources": ["CSPI Food Dyes: A Rainbow of Risks (2010), Red 3 section"]
+  },
+  {
+    "id": "red-40",
+    "displayName": "Red 40",
+    "codeName": "FD&C Red No. 40 (Allura Red AC)",
+    "colorFamily": "red",
+    "usageTier": "high",
+    "riskFlag": "caution",
+    "regulatoryStatus": "allowed",
+    "commonCategories": ["beverages", "candy", "cereal", "snacks", "dairy"],
+    "facts": ["One of the most widely used certified dyes in the U.S."],
+    "sources": ["CSPI Food Dyes: A Rainbow of Risks (2010)"]
+  },
+  {
+    "id": "yellow-5",
+    "displayName": "Yellow 5",
+    "codeName": "FD&C Yellow No. 5 (Tartrazine)",
+    "colorFamily": "yellow",
+    "usageTier": "high",
+    "riskFlag": "caution",
+    "regulatoryStatus": "allowed",
+    "commonCategories": ["beverages", "candy", "cereal", "snacks", "baked"],
+    "facts": [
+      "CSPI discusses hypersensitivity and other concerns for Yellow 5.",
+      "Genotoxicity summary tables for Yellow 5 appear in the report appendix."
+    ],
+    "sources": ["CSPI Food Dyes: A Rainbow of Risks (2010), Yellow 5 + Appendix tables"]
+  },
+  {
+    "id": "yellow-6",
+    "displayName": "Yellow 6",
+    "codeName": "FD&C Yellow No. 6 (Sunset Yellow FCF)",
+    "colorFamily": "yellow",
+    "usageTier": "high",
+    "riskFlag": "high",
+    "regulatoryStatus": "warning",
+    "commonCategories": ["beverages", "candy", "cereal", "snacks", "baked"],
+    "facts": [
+      "CSPI argues Yellow 6 should be removed from the food supply because it provides no health benefit."
+    ],
+    "sources": ["CSPI Food Dyes: A Rainbow of Risks (2010)"]
+  },
+  {
+    "id": "citrus-red-2",
+    "displayName": "Citrus Red 2",
+    "codeName": "Citrus Red No. 2",
+    "colorFamily": "red",
+    "usageTier": "low",
+    "riskFlag": "high",
+    "regulatoryStatus": "restricted",
+    "commonCategories": ["mixed"],
+    "facts": [
+      "Used to color the peel of oranges (limited-use dye).",
+      "CSPI discusses toxicity and other concerns in animal studies."
+    ],
+    "sources": ["CSPI Food Dyes: A Rainbow of Risks (2010), Citrus Red 2 section"]
+  },
+  {
+    "id": "orange-b",
+    "displayName": "Orange B",
+    "codeName": "Orange B",
+    "colorFamily": "other",
+    "usageTier": "low",
+    "riskFlag": "caution",
+    "regulatoryStatus": "restricted",
+    "commonCategories": ["mixed"],
+    "facts": [
+      "Historically permitted for specific uses (e.g., sausage casings); CSPI notes FDA proposed banning it but did not finalize after usage declined."
+    ],
+    "sources": ["CSPI Food Dyes: A Rainbow of Risks (2010), Orange B section"]
+  }
+]

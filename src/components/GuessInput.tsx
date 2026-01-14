@@ -56,7 +56,6 @@ const GuessInput = ({
             value={value}
             onChange={(next) => onChange(next ?? "")}
             disabled={disabled}
-            nothingFoundMessage="No matching dye"
             clearable
             leftSection={
               <Box

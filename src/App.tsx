@@ -47,6 +47,7 @@ const App = () => {
   const [selection, setSelection] = useState("");
   const [error, setError] = useState("");
   const [showResults, setShowResults] = useState(false);
+  const [resultsDismissed, setResultsDismissed] = useState(false);
   const hydratedRef = useRef(false);
 
   useEffect(() => {
@@ -59,11 +60,14 @@ const App = () => {
     if (saved) {
       setGuesses(saved.guesses);
       setStatus(saved.status);
-      setShowResults(saved.status !== "playing");
+      const dismissed = saved.resultsDismissed ?? false;
+      setResultsDismissed(dismissed);
+      setShowResults(saved.status !== "playing" && !dismissed);
     } else {
       setGuesses([]);
       setStatus("playing");
       setShowResults(false);
+      setResultsDismissed(false);
     }
     setSelection("");
     hydratedRef.current = true;
@@ -73,11 +77,12 @@ const App = () => {
     if (mode !== "daily" || !hydratedRef.current) {
       return;
     }
-    saveGameState(dateKey, { dateKey, guesses, status });
-  }, [dateKey, guesses, mode, status]);
+    saveGameState(dateKey, { dateKey, guesses, status, resultsDismissed });
+  }, [dateKey, guesses, mode, resultsDismissed, status]);
 
   useEffect(() => {
     if (status === "won" || status === "lost") {
+      setResultsDismissed(false);
       setShowResults(true);
     }
   }, [status]);
@@ -99,6 +104,7 @@ const App = () => {
     setSelection("");
     setError("");
     setShowResults(false);
+    setResultsDismissed(false);
   };
 
   const returnToDaily = () => {
@@ -113,8 +119,14 @@ const App = () => {
     setSelection("");
     setError("");
     setShowResults(false);
+    setResultsDismissed(false);
     hydratedRef.current = true;
-    saveGameState(dateKey, { dateKey, guesses: [], status: "playing" });
+    saveGameState(dateKey, {
+      dateKey,
+      guesses: [],
+      status: "playing",
+      resultsDismissed: false
+    });
   };
 
   useEffect(() => {
@@ -158,7 +170,12 @@ const App = () => {
     setError("");
     setStatus(nextStatus);
     if (mode === "daily") {
-      saveGameState(dateKey, { dateKey, guesses: nextGuesses, status: nextStatus });
+      saveGameState(dateKey, {
+        dateKey,
+        guesses: nextGuesses,
+        status: nextStatus,
+        resultsDismissed: false
+      });
     }
   };
 
@@ -189,6 +206,20 @@ const App = () => {
   const isLocked = status !== "playing";
   const remainingAttempts = Math.max(0, MAX_ATTEMPTS - guesses.length);
   const canReopenResults = status !== "playing" && !showResults;
+  const handleCloseResults = () => {
+    setShowResults(false);
+    if (status !== "playing") {
+      setResultsDismissed(true);
+      if (mode === "daily") {
+        saveGameState(dateKey, {
+          dateKey,
+          guesses,
+          status,
+          resultsDismissed: true
+        });
+      }
+    }
+  };
 
   return (
     <Box style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
@@ -318,7 +349,7 @@ const App = () => {
             status={status}
             attempts={guesses.length}
             target={target}
-            onClose={() => setShowResults(false)}
+            onClose={handleCloseResults}
             onShare={handleShare}
             onPractice={startPractice}
             isDaily={mode === "daily"}

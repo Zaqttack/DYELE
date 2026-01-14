@@ -1,3 +1,4 @@
+import { Button, Group, List, Modal, Stack, Text, Title } from "@mantine/core";
 import type { Dye, GameStatus } from "../types";
 
 type ResultsModalProps = {
@@ -19,59 +20,47 @@ const ResultsModal = ({
   onPractice,
   isDaily
 }: ResultsModalProps) => (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4">
-    <div className="w-full max-w-2xl rounded-3xl bg-parchment p-6 shadow-xl">
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-inkMuted">
-            {status === "won" ? "You solved it" : "Out of guesses"}
-          </p>
-          <h2 className="font-display text-3xl text-ink">
-            {status === "won"
-              ? `Solved in ${attempts} attempt${attempts === 1 ? "" : "s"}`
-              : "Try again tomorrow"}
-          </h2>
-        </div>
-        <button
-          type="button"
-          className="text-sm font-semibold uppercase tracking-[0.2em] text-inkMuted"
-          onClick={onClose}
-        >
-          Close
-        </button>
-      </div>
-      <div className="mt-6 rounded-2xl border border-ink/10 bg-white/80 p-4">
-        <h3 className="text-lg font-semibold text-ink">{target.displayName}</h3>
-        {target.codeName ? (
-          <p className="text-sm text-inkMuted">{target.codeName}</p>
-        ) : null}
-        <ul className="mt-3 space-y-2 text-sm text-ink">
+  <Modal
+    opened
+    onClose={onClose}
+    centered
+    size="lg"
+    radius="lg"
+    withCloseButton
+    title={
+      <Text size="xs" tt="uppercase" fw={700} c="dimmed" style={{ letterSpacing: "0.2em" }}>
+        {status === "won" ? "You solved it" : "Out of guesses"}
+      </Text>
+    }
+  >
+    <Stack gap="md">
+      <Title order={2} ff="Fraunces, serif">
+        {status === "won"
+          ? `Solved in ${attempts} attempt${attempts === 1 ? "" : "s"}`
+          : "Try again tomorrow"}
+      </Title>
+      <Stack gap="xs" p="md" style={{ border: "1px solid rgba(18, 17, 23, 0.1)", borderRadius: 16 }}>
+        <Text fw={600}>{target.displayName}</Text>
+        {target.codeName ? <Text size="sm" c="dimmed">{target.codeName}</Text> : null}
+        <List size="sm" spacing="xs">
           {target.facts.map((fact) => (
-            <li key={fact}>• {fact}</li>
+            <List.Item key={fact}>{fact}</List.Item>
           ))}
-        </ul>
-        <p className="mt-3 text-xs text-inkMuted">
+        </List>
+        <Text size="xs" c="dimmed">
           Sources: {target.sources.join("; ")}
-        </p>
-      </div>
-      <div className="mt-6 flex flex-col gap-3 md:flex-row">
-        <button
-          type="button"
-          className="rounded-xl bg-ink px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-parchment"
-          onClick={onShare}
-        >
+        </Text>
+      </Stack>
+      <Group grow>
+        <Button radius="md" color="dark" onClick={onShare}>
           Share results
-        </button>
-        <button
-          type="button"
-          className="rounded-xl border border-ink/20 px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-ink"
-          onClick={onPractice}
-        >
+        </Button>
+        <Button radius="md" variant="outline" color="dark" onClick={onPractice}>
           {isDaily ? "Play practice" : "New practice"}
-        </button>
-      </div>
-    </div>
-  </div>
+        </Button>
+      </Group>
+    </Stack>
+  </Modal>
 );
 
 export default ResultsModal;

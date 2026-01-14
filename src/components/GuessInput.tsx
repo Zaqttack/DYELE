@@ -1,3 +1,4 @@
+import { Autocomplete, Button, Paper, Stack, Text } from "@mantine/core";
 import type { Dye } from "../types";
 
 type GuessInputProps = {
@@ -16,45 +17,53 @@ const GuessInput = ({
   error,
   onChange,
   onSubmit
-}: GuessInputProps) => (
-  <div
-    className="rounded-2xl border border-ink/10 bg-white/80 p-4 shadow-md"
-    onKeyDown={(event) => {
-      if (event.key === "Enter" && !disabled) {
-        onSubmit();
-      }
-    }}
-  >
-    <label className="block text-xs font-semibold uppercase tracking-[0.2em] text-inkMuted">
-      Choose your dye
-    </label>
-    <div className="mt-2 flex flex-col gap-3 md:flex-row md:items-center">
-      <select
-        className="w-full rounded-xl border border-ink/15 bg-white px-4 py-3 text-base shadow-sm focus:border-ink focus:outline-none"
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        disabled={disabled}
-      >
-        <option value="">Select a dye…</option>
-        {dyes.map((dye) => (
-          <option key={dye.id} value={dye.id}>
-            {dye.displayName}
-          </option>
-        ))}
-      </select>
-      <button
-        type="button"
-        className="rounded-xl bg-ink px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-parchment transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
-        onClick={onSubmit}
-        disabled={disabled}
-      >
-        Submit
-      </button>
-    </div>
-    {error ? (
-      <p className="mt-2 text-sm font-semibold text-red-700">{error}</p>
-    ) : null}
-  </div>
-);
+}: GuessInputProps) => {
+  const data = dyes.map((dye) => dye.displayName);
+
+  return (
+    <Paper
+      radius="lg"
+      p="md"
+      withBorder
+      shadow="sm"
+      onKeyDown={(event) => {
+        if (event.key === "Enter" && !disabled) {
+          onSubmit();
+        }
+      }}
+    >
+      <Stack gap="sm">
+        <Text size="xs" tt="uppercase" fw={700} c="dimmed" style={{ letterSpacing: "0.2em" }}>
+          Choose your dye
+        </Text>
+        <Stack gap="sm">
+          <Autocomplete
+            placeholder="Start typing a dye name…"
+            data={data}
+            value={value}
+            onChange={(next) => onChange(next ?? "")}
+            disabled={disabled}
+            nothingFoundMessage="No matching dye"
+            clearable
+          />
+          <Button
+            onClick={onSubmit}
+            disabled={disabled}
+            size="md"
+            radius="md"
+            color="dark"
+          >
+            Submit
+          </Button>
+        </Stack>
+        {error ? (
+          <Text size="sm" c="red.7" fw={600}>
+            {error}
+          </Text>
+        ) : null}
+      </Stack>
+    </Paper>
+  );
+};
 
 export default GuessInput;

@@ -12,6 +12,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@mantine/core": "^8.3.12",
+    "@mantine/hooks": "^8.3.12",
     "react": "^19.2.3",
     "react-dom": "^19.2.3"
   },

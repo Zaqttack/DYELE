@@ -1,3 +1,4 @@
+import { Paper, Stack, Text } from "@mantine/core";
 import type { Feedback } from "../types";
 
 const feedbackLabel = (feedback: Feedback): string => {
@@ -19,21 +20,23 @@ const feedbackLabel = (feedback: Feedback): string => {
   }
 };
 
-const feedbackClasses = (feedback?: Feedback): string => {
+const feedbackStyles = (
+  feedback?: Feedback
+): { backgroundColor: string; color: string } => {
   if (!feedback) {
-    return "bg-white/70 border border-ink/10 text-inkMuted";
+    return { backgroundColor: "rgba(255, 255, 255, 0.8)", color: "#4d4b52" };
   }
   switch (feedback) {
     case "match":
-      return "bg-match text-white";
+      return { backgroundColor: "#4f9a5f", color: "#ffffff" };
     case "partial":
     case "higher":
     case "lower":
     case "stricter":
     case "looser":
-      return "bg-hint text-ink";
+      return { backgroundColor: "#d9b24c", color: "#121117" };
     default:
-      return "bg-miss text-inkMuted";
+      return { backgroundColor: "#d0d0d4", color: "#4d4b52" };
   }
 };
 
@@ -43,16 +46,22 @@ type AttributeTileProps = {
 };
 
 const AttributeTile = ({ label, feedback }: AttributeTileProps) => (
-  <div
-    className={`flex flex-col items-center justify-center rounded-xl px-2 py-3 text-xs font-semibold uppercase tracking-wide shadow-tile ${feedbackClasses(
-      feedback
-    )}`}
+  <Paper
+    radius="md"
+    p="sm"
+    shadow="sm"
+    withBorder
+    style={feedbackStyles(feedback)}
   >
-    <span className="text-[0.6rem] opacity-70">{label}</span>
-    <span className="text-sm normal-case">
-      {feedback ? feedbackLabel(feedback) : "—"}
-    </span>
-  </div>
+    <Stack gap={4} align="center">
+      <Text size="xs" tt="uppercase" fw={600} style={{ opacity: 0.7 }}>
+        {label}
+      </Text>
+      <Text size="sm" fw={600}>
+        {feedback ? feedbackLabel(feedback) : "—"}
+      </Text>
+    </Stack>
+  </Paper>
 );
 
 export default AttributeTile;

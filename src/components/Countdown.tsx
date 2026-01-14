@@ -1,3 +1,4 @@
+import { Paper, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { getMsUntilChicagoMidnight } from "../lib/date";
 
@@ -21,9 +22,14 @@ const Countdown = () => {
   }, []);
 
   return (
-    <div className="rounded-2xl border border-ink/10 bg-white/70 px-4 py-3 text-sm text-ink">
-      Next puzzle in <span className="font-semibold">{formatCountdown(remaining)}</span>
-    </div>
+    <Paper radius="md" px="md" py="sm" withBorder>
+      <Text size="sm">
+        Next puzzle in{" "}
+        <Text span fw={600}>
+          {formatCountdown(remaining)}
+        </Text>
+      </Text>
+    </Paper>
   );
 };
 

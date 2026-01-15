@@ -1,6 +1,6 @@
 import { Box, Group, Paper, SimpleGrid, Text } from "@mantine/core";
 import AttributeTile from "./AttributeTile";
-import { ATTRIBUTE_META } from "../lib/game";
+import { VISIBLE_ATTRIBUTE_META } from "../lib/game";
 import type { Guess } from "../types";
 
 type GuessRowProps = {
@@ -35,8 +35,8 @@ const GuessRow = ({ index, guess, displayName, colorHex }: GuessRowProps) => {
           </Text>
         </Group>
       </Group>
-      <SimpleGrid cols={{ base: 2, md: 5 }} spacing="sm">
-        {ATTRIBUTE_META.map((item) => (
+      <SimpleGrid cols={{ base: 2, md: 4 }} spacing="sm">
+        {VISIBLE_ATTRIBUTE_META.map((item) => (
           <AttributeTile
             key={item.key}
             label={item.label}

@@ -18,6 +18,13 @@ export const ATTRIBUTE_META: { key: AttributeKey; label: string }[] = [
 ];
 
 const ATTRIBUTE_KEYS: AttributeKey[] = ATTRIBUTE_META.map((item) => item.key);
+const HIDDEN_ATTRIBUTE_KEYS: AttributeKey[] = ["colorFamily"];
+export const VISIBLE_ATTRIBUTE_META = ATTRIBUTE_META.filter(
+  (item) => !HIDDEN_ATTRIBUTE_KEYS.includes(item.key)
+);
+const VISIBLE_ATTRIBUTE_KEYS: AttributeKey[] = VISIBLE_ATTRIBUTE_META.map(
+  (item) => item.key
+);
 
 const TIER_ORDER: Tier[] = ["low", "medium", "high"];
 const RISK_ORDER: RiskFlag[] = ["none", "caution", "high"];
@@ -118,7 +125,7 @@ const feedbackToEmoji = (value: Feedback): string => {
 export const formatShareGrid = (guesses: Guess[]): string =>
   guesses
     .map((guess) =>
-      ATTRIBUTE_KEYS.map((key) => {
+      VISIBLE_ATTRIBUTE_KEYS.map((key) => {
         const feedback = guess.feedback.find((item) => item.key === key);
         return feedback ? feedbackToEmoji(feedback.value) : "⬜";
       }).join("")

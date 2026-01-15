@@ -31,7 +31,15 @@ const dyes = dyesData as Dye[];
 const MAX_ATTEMPTS = 4;
 const CHANGELOG_ENTRIES = [
   {
-    date: "2026-01-13",
+    date: "2026-01-15",
+    items: [
+      "Daily progress stays saved when you come back.",
+      "New popups for updates and sources.",
+      "Fresh visuals: color swatches and cleaner cards."
+    ]
+  },
+  {
+    date: "2026-01-14",
     items: [
       "Initial public release of DYELE.",
       "Daily puzzle, practice mode, and share results."

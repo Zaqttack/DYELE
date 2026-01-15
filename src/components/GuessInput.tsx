@@ -12,6 +12,7 @@ import type { Dye } from "../types";
 type GuessInputProps = {
   dyes: Dye[];
   guessedIds: string[];
+  dateKey: string;
   value: string;
   disabled?: boolean;
   error?: string;
@@ -22,12 +23,36 @@ type GuessInputProps = {
 const GuessInput = ({
   dyes,
   guessedIds,
+  dateKey,
   value,
   disabled,
   error,
   onChange,
   onSubmit
 }: GuessInputProps) => {
+  const hashString = (input: string): number => {
+    let hash = 0;
+    for (let i = 0; i < input.length; i += 1) {
+      hash = (hash << 5) - hash + input.charCodeAt(i);
+      hash |= 0;
+    }
+    return Math.abs(hash);
+  };
+
+  const getCategoryHint = (dye?: Dye): string => {
+    if (!dye || dye.commonCategories.length === 0) {
+      return "";
+    }
+    const nonMixed = dye.commonCategories.filter((item) => item !== "mixed");
+    const pool = nonMixed.length > 0 ? nonMixed : dye.commonCategories;
+    const index = hashString(`${dateKey}:${dye.id}`) % pool.length;
+    const picked = pool[index];
+    if (picked === "mixed") {
+      return "found across multiple foods";
+    }
+    return `found in ${picked}`;
+  };
+
   const data = dyes
     .filter((dye) => !guessedIds.includes(dye.id))
     .map((dye) => ({ value: dye.displayName }));
@@ -70,6 +95,7 @@ const GuessInput = ({
             }
             renderOption={({ option }) => {
               const dye = dyes.find((item) => item.displayName === option.value);
+              const hint = getCategoryHint(dye);
               return (
                 <Group gap="sm" align="center">
                   <Box
@@ -84,6 +110,11 @@ const GuessInput = ({
                   <Text size="sm" fw={600}>
                     {option.value}
                   </Text>
+                  {hint ? (
+                    <Text size="xs" c="dimmed">
+                      {hint}
+                    </Text>
+                  ) : null}
                 </Group>
               );
             }}

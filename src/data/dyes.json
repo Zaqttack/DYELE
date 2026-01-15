@@ -8,7 +8,7 @@
     "usageTier": "medium",
     "riskFlag": "caution",
     "regulatoryStatus": "allowed",
-    "commonCategories": ["beverages", "candy", "cereal", "baked", "dairy"],
+    "commonCategories": ["beverages", "candy", "cereal", "baked goods", "dairy"],
     "facts": [
       "Used in many baked goods, beverages, dessert mixes, candies, cereals, and dairy treats.",
       "CSPI notes key animal studies did not find toxicity, but flags other findings as raising questions."
@@ -24,7 +24,7 @@
     "usageTier": "low",
     "riskFlag": "caution",
     "regulatoryStatus": "allowed",
-    "commonCategories": ["candy", "cereal", "baked", "snacks"],
+    "commonCategories": ["candy", "cereal", "baked goods", "snacks"],
     "facts": ["Another FDA-certified blue dye discussed in the CSPI report."],
     "sources": ["CSPI Food Dyes: A Rainbow of Risks (2010), Blue 2 section"]
   },
@@ -37,7 +37,7 @@
     "usageTier": "low",
     "riskFlag": "caution",
     "regulatoryStatus": "allowed",
-    "commonCategories": ["candy", "cereal", "baked", "snacks"],
+    "commonCategories": ["candy", "cereal", "baked goods", "snacks"],
     "facts": ["FDA-certified green dye discussed in the CSPI report."],
     "sources": ["CSPI Food Dyes: A Rainbow of Risks (2010), Green 3 section"]
   },
@@ -50,7 +50,7 @@
     "usageTier": "low",
     "riskFlag": "high",
     "regulatoryStatus": "warning",
-    "commonCategories": ["candy", "baked", "snacks"],
+    "commonCategories": ["candy", "baked goods", "snacks"],
     "facts": ["CSPI discusses carcinogenicity concerns associated with Red 3 in animal studies."],
     "sources": ["CSPI Food Dyes: A Rainbow of Risks (2010), Red 3 section"]
   },
@@ -76,7 +76,7 @@
     "usageTier": "high",
     "riskFlag": "caution",
     "regulatoryStatus": "allowed",
-    "commonCategories": ["beverages", "candy", "cereal", "snacks", "baked"],
+    "commonCategories": ["beverages", "candy", "cereal", "snacks", "baked goods"],
     "facts": [
       "CSPI discusses hypersensitivity and other concerns for Yellow 5.",
       "Genotoxicity summary tables for Yellow 5 appear in the report appendix."
@@ -92,7 +92,7 @@
     "usageTier": "high",
     "riskFlag": "high",
     "regulatoryStatus": "warning",
-    "commonCategories": ["beverages", "candy", "cereal", "snacks", "baked"],
+    "commonCategories": ["beverages", "candy", "cereal", "snacks", "baked goods"],
     "facts": [
       "CSPI argues Yellow 6 should be removed from the food supply because it provides no health benefit."
     ],

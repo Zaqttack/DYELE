@@ -338,6 +338,7 @@ const App = () => {
         <GuessInput
           dyes={dyes}
           guessedIds={guesses.map((guess) => guess.dyeId)}
+          dateKey={dateKey}
           value={selection}
           onChange={setSelection}
           onSubmit={handleSubmit}

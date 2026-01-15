@@ -47,7 +47,7 @@ export type Dye = {
   regulatoryStatus: RegulatoryStatus;
   commonCategories: FoodCategory[];
   facts: string[];
-  sources: string[];
+  sources: { title: string; url?: string }[];
 };
 
 export type Guess = {

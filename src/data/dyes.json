@@ -13,7 +13,12 @@
       "Used in many baked goods, beverages, dessert mixes, candies, cereals, and dairy treats.",
       "CSPI notes key animal studies did not find toxicity, but flags other findings as raising questions."
     ],
-    "sources": ["CSPI Food Dyes: A Rainbow of Risks (2010), Blue 1 section"]
+    "sources": [
+      {
+        "title": "CSPI Food Dyes: A Rainbow of Risks (2010), Blue 1 section",
+        "url": "https://www.cspi.org/sites/default/files/attachment/food-dyes-rainbow-of-risks.pdf"
+      }
+    ]
   },
   {
     "id": "blue-2",
@@ -26,7 +31,12 @@
     "regulatoryStatus": "allowed",
     "commonCategories": ["candy", "cereal", "baked goods", "snacks"],
     "facts": ["Another FDA-certified blue dye discussed in the CSPI report."],
-    "sources": ["CSPI Food Dyes: A Rainbow of Risks (2010), Blue 2 section"]
+    "sources": [
+      {
+        "title": "CSPI Food Dyes: A Rainbow of Risks (2010), Blue 2 section",
+        "url": "https://www.cspi.org/sites/default/files/attachment/food-dyes-rainbow-of-risks.pdf"
+      }
+    ]
   },
   {
     "id": "green-3",
@@ -39,7 +49,12 @@
     "regulatoryStatus": "allowed",
     "commonCategories": ["candy", "cereal", "baked goods", "snacks"],
     "facts": ["FDA-certified green dye discussed in the CSPI report."],
-    "sources": ["CSPI Food Dyes: A Rainbow of Risks (2010), Green 3 section"]
+    "sources": [
+      {
+        "title": "CSPI Food Dyes: A Rainbow of Risks (2010), Green 3 section",
+        "url": "https://www.cspi.org/sites/default/files/attachment/food-dyes-rainbow-of-risks.pdf"
+      }
+    ]
   },
   {
     "id": "red-3",
@@ -52,7 +67,12 @@
     "regulatoryStatus": "warning",
     "commonCategories": ["candy", "baked goods", "snacks"],
     "facts": ["CSPI discusses carcinogenicity concerns associated with Red 3 in animal studies."],
-    "sources": ["CSPI Food Dyes: A Rainbow of Risks (2010), Red 3 section"]
+    "sources": [
+      {
+        "title": "CSPI Food Dyes: A Rainbow of Risks (2010), Red 3 section",
+        "url": "https://www.cspi.org/sites/default/files/attachment/food-dyes-rainbow-of-risks.pdf"
+      }
+    ]
   },
   {
     "id": "red-40",
@@ -65,7 +85,12 @@
     "regulatoryStatus": "allowed",
     "commonCategories": ["beverages", "candy", "cereal", "snacks", "dairy"],
     "facts": ["One of the most widely used certified dyes in the U.S."],
-    "sources": ["CSPI Food Dyes: A Rainbow of Risks (2010)"]
+    "sources": [
+      {
+        "title": "CSPI Food Dyes: A Rainbow of Risks (2010)",
+        "url": "https://www.cspi.org/sites/default/files/attachment/food-dyes-rainbow-of-risks.pdf"
+      }
+    ]
   },
   {
     "id": "yellow-5",
@@ -81,7 +106,12 @@
       "CSPI discusses hypersensitivity and other concerns for Yellow 5.",
       "Genotoxicity summary tables for Yellow 5 appear in the report appendix."
     ],
-    "sources": ["CSPI Food Dyes: A Rainbow of Risks (2010), Yellow 5 + Appendix tables"]
+    "sources": [
+      {
+        "title": "CSPI Food Dyes: A Rainbow of Risks (2010), Yellow 5 + Appendix tables",
+        "url": "https://www.cspi.org/sites/default/files/attachment/food-dyes-rainbow-of-risks.pdf"
+      }
+    ]
   },
   {
     "id": "yellow-6",
@@ -96,7 +126,12 @@
     "facts": [
       "CSPI argues Yellow 6 should be removed from the food supply because it provides no health benefit."
     ],
-    "sources": ["CSPI Food Dyes: A Rainbow of Risks (2010)"]
+    "sources": [
+      {
+        "title": "CSPI Food Dyes: A Rainbow of Risks (2010)",
+        "url": "https://www.cspi.org/sites/default/files/attachment/food-dyes-rainbow-of-risks.pdf"
+      }
+    ]
   },
   {
     "id": "citrus-red-2",
@@ -112,7 +147,12 @@
       "Used to color the peel of oranges (limited-use dye).",
       "CSPI discusses toxicity and other concerns in animal studies."
     ],
-    "sources": ["CSPI Food Dyes: A Rainbow of Risks (2010), Citrus Red 2 section"]
+    "sources": [
+      {
+        "title": "CSPI Food Dyes: A Rainbow of Risks (2010), Citrus Red 2 section",
+        "url": "https://www.cspi.org/sites/default/files/attachment/food-dyes-rainbow-of-risks.pdf"
+      }
+    ]
   },
   {
     "id": "orange-b",
@@ -127,6 +167,11 @@
     "facts": [
       "Historically permitted for specific uses (e.g., sausage casings); CSPI notes FDA proposed banning it but did not finalize after usage declined."
     ],
-    "sources": ["CSPI Food Dyes: A Rainbow of Risks (2010), Orange B section"]
+    "sources": [
+      {
+        "title": "CSPI Food Dyes: A Rainbow of Risks (2010), Orange B section",
+        "url": "https://www.cspi.org/sites/default/files/attachment/food-dyes-rainbow-of-risks.pdf"
+      }
+    ]
   }
 ]

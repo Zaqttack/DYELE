@@ -1,5 +1,23 @@
 import { Divider, List, Modal, ScrollArea, Stack, Text, Title } from "@mantine/core";
 
+const ExternalLinkIcon = () => (
+  <svg
+    width="12"
+    height="12"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    style={{ marginLeft: 4 }}
+  >
+    <path d="M14 3h7v7" />
+    <path d="M10 14L21 3" />
+    <path d="M21 14v7H3V3h7" />
+  </svg>
+);
+
 type SourcesPlansModalProps = {
   opened: boolean;
   onClose: () => void;
@@ -28,15 +46,15 @@ const SourcesPlansModal = ({ opened, onClose }: SourcesPlansModalProps) => (
           <List size="sm" spacing="xs">
             <List.Item>
               CSPI Food Dyes: A Rainbow of Risks (2010) — core facts and dye list
-              (
               <a
                 href="https://www.cspi.org/sites/default/files/attachment/food-dyes-rainbow-of-risks.pdf"
                 target="_blank"
                 rel="noreferrer"
+                aria-label="Open CSPI Food Dyes PDF"
+                style={{ marginLeft: 6 }}
               >
-                PDF
+                <ExternalLinkIcon />
               </a>
-              )
             </List.Item>
             <List.Item>
               FDA-certified color additives for foods and ingested drugs
@@ -51,10 +69,6 @@ const SourcesPlansModal = ({ opened, onClose }: SourcesPlansModalProps) => (
           <List size="sm" spacing="xs">
             <List.Item>Recalculation for daily dye decisions</List.Item>
             <List.Item>Add more dyes to increase the difficulty</List.Item>
-            <List.Item>
-              Create local user history so players can review and replay previous
-              days
-            </List.Item>
             <List.Item>Refine attribute weighting and difficulty tiers</List.Item>
             <List.Item>Improve share formatting and session analytics</List.Item>
           </List>

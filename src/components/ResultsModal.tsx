@@ -1,6 +1,24 @@
 import { Box, Button, Group, List, Modal, Stack, Text, Title } from "@mantine/core";
 import type { Dye, GameStatus } from "../types";
 
+const ExternalLinkIcon = () => (
+  <svg
+    width="12"
+    height="12"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    style={{ marginLeft: 4 }}
+  >
+    <path d="M14 3h7v7" />
+    <path d="M10 14L21 3" />
+    <path d="M21 14v7H3V3h7" />
+  </svg>
+);
+
 type ResultsModalProps = {
   status: GameStatus;
   attempts: number;
@@ -64,7 +82,24 @@ const ResultsModal = ({
           ))}
         </List>
         <Text size="xs" c="dimmed">
-          Sources: {target.sources.join("; ")}
+          Sources:{" "}
+          {target.sources.map((source, index) => (
+            <span key={`${source.title}-${index}`}>
+              {source.title}
+              {source.url ? (
+                <a
+                  href={source.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`Open ${source.title}`}
+                  style={{ marginLeft: 6 }}
+                >
+                  <ExternalLinkIcon />
+                </a>
+              ) : null}
+              {index < target.sources.length - 1 ? ", " : ""}
+            </span>
+          ))}
         </Text>
       </Stack>
       <Group grow>

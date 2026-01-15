@@ -11,15 +11,23 @@ const formatCountdown = (ms: number): string => {
   return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 };
 
-const Countdown = () => {
+type CountdownProps = {
+  onDayReset?: () => void;
+};
+
+const Countdown = ({ onDayReset }: CountdownProps) => {
   const [remaining, setRemaining] = useState(getMsUntilChicagoMidnight());
 
   useEffect(() => {
     const interval = window.setInterval(() => {
-      setRemaining(getMsUntilChicagoMidnight());
+      const nextRemaining = getMsUntilChicagoMidnight();
+      setRemaining(nextRemaining);
+      if (nextRemaining <= 0 && onDayReset) {
+        onDayReset();
+      }
     }, 1000);
     return () => window.clearInterval(interval);
-  }, []);
+  }, [onDayReset]);
 
   return (
     <Paper radius="md" px="md" py="sm" withBorder>

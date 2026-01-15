@@ -48,7 +48,7 @@ const getRandomDye = (list: Dye[]): Dye => {
 };
 
 const App = () => {
-  const [dateKey] = useState(getChicagoDateKey);
+  const [dateKey, setDateKey] = useState(getChicagoDateKey);
   const dailyTarget = useMemo(() => selectDailyDye(dyes, dateKey), [dateKey]);
   const [mode, setMode] = useState<"daily" | "practice">("daily");
   const [target, setTarget] = useState<Dye>(dailyTarget);
@@ -175,6 +175,27 @@ const App = () => {
     (window as typeof window & { __dyeleAdmin?: typeof adminApi }).__dyeleAdmin =
       adminApi;
   }, [dateKey]);
+
+  const handleDailyReset = () => {
+    if (mode !== "daily") {
+      return;
+    }
+    const nextDateKey = getChicagoDateKey();
+    if (nextDateKey === dateKey) {
+      return;
+    }
+    setDateKey(nextDateKey);
+    setTarget(selectDailyDye(dyes, nextDateKey));
+    setGuesses([]);
+    setStatus("playing");
+    setSelection("");
+    setError("");
+    setShowResults(false);
+    setResultsDismissed(false);
+    setShareMessage("");
+    setSuppressResultsOpen(false);
+    setHasHydratedDaily(false);
+  };
 
   const handleSubmit = () => {
     const trimmedSelection = selection.trim();
@@ -344,7 +365,7 @@ const App = () => {
 
           <Group justify="space-between" align="center" wrap="wrap">
             <Box>
-              {mode === "daily" ? <Countdown /> : null}
+              {mode === "daily" ? <Countdown onDayReset={handleDailyReset} /> : null}
             </Box>
             <Group align="center" gap="sm" wrap="nowrap">
               <Switch

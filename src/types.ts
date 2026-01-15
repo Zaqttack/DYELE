@@ -63,3 +63,10 @@ export type GameState = {
   status: GameStatus;
   resultsDismissed?: boolean;
 };
+
+export type HistoryEntry = {
+  dateKey: string;
+  status: GameStatus;
+  attempts: number;
+  shareGrid: string;
+};

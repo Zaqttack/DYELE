@@ -18,14 +18,23 @@ import Countdown from "./components/Countdown";
 import Strikes from "./components/Strikes";
 import ChangeLogModal from "./components/ChangeLogModal";
 import SourcesPlansModal from "./components/SourcesPlansModal";
+import HistoryModal from "./components/HistoryModal";
 import { getChicagoDateKey } from "./lib/date";
 import {
   compareGuessToTarget,
   formatShareGrid,
   selectDailyDye
 } from "./lib/game";
-import { clearGameState, loadGameState, saveGameState } from "./lib/storage";
-import type { Dye, GameStatus, Guess } from "./types";
+import {
+  clearGameState,
+  loadAllGameStates,
+  loadGameState,
+  loadHistory,
+  saveHistory,
+  saveGameState,
+  upsertHistoryEntry
+} from "./lib/storage";
+import type { Dye, GameStatus, Guess, HistoryEntry } from "./types";
 
 const dyes = dyesData as Dye[];
 const MAX_ATTEMPTS = 4;
@@ -72,6 +81,8 @@ const App = () => {
   const [suppressResultsOpen, setSuppressResultsOpen] = useState(false);
   const [showChangelog, setShowChangelog] = useState(false);
   const [showSourcesPlans, setShowSourcesPlans] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
+  const [historyEntries, setHistoryEntries] = useState<HistoryEntry[]>([]);
   const suppressResultsOnceRef = useRef(false);
 
   useEffect(() => {
@@ -102,6 +113,33 @@ const App = () => {
     setSelection("");
     setHasHydratedDaily(true);
   }, [mode, dateKey, dailyTarget]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    const existing = loadHistory();
+    if (existing.length > 0) {
+      setHistoryEntries(existing);
+      return;
+    }
+    const states = loadAllGameStates();
+    const migrated = states
+      .filter((state) => state.status !== "playing" && state.guesses.length > 0)
+      .map((state) => ({
+        dateKey: state.dateKey,
+        status: state.status,
+        attempts: state.guesses.length,
+        shareGrid: formatShareGrid(state.guesses)
+      }))
+      .sort((a, b) => b.dateKey.localeCompare(a.dateKey));
+    if (migrated.length > 0) {
+      saveHistory(migrated);
+      setHistoryEntries(migrated);
+      return;
+    }
+    setHistoryEntries([]);
+  }, []);
 
   useEffect(() => {
     if (mode !== "daily" || !hasHydratedDaily) {
@@ -174,13 +212,59 @@ const App = () => {
     });
   };
 
+  const getDateKeyDaysAgo = (daysAgo: number): string => {
+    const date = new Date();
+    date.setDate(date.getDate() - daysAgo);
+    const formatter = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "America/Chicago",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    });
+    const parts = formatter.formatToParts(date);
+    const year = parts.find((part) => part.type === "year")?.value ?? "0000";
+    const month = parts.find((part) => part.type === "month")?.value ?? "00";
+    const day = parts.find((part) => part.type === "day")?.value ?? "00";
+    return `${year}-${month}-${day}`;
+  };
+
+  const seedHistory = (count = 5) => {
+    const emojis = ["🟩", "🟨", "⬜"];
+    const existing = loadHistory();
+    const seeded: HistoryEntry[] = [];
+
+    for (let i = 1; i <= count; i += 1) {
+      const dateKeyForEntry = getDateKeyDaysAgo(i);
+      const attempts = Math.floor(Math.random() * MAX_ATTEMPTS) + 1;
+      const rows = Array.from({ length: attempts }, () =>
+        Array.from({ length: 4 }, () => emojis[Math.floor(Math.random() * 3)]).join("")
+      );
+      seeded.push({
+        dateKey: dateKeyForEntry,
+        status: Math.random() > 0.25 ? "won" : "lost",
+        attempts,
+        shareGrid: rows.join("\n")
+      });
+    }
+
+    const merged = [
+      ...seeded,
+      ...existing.filter(
+        (entry) => !seeded.some((seed) => seed.dateKey === entry.dateKey)
+      )
+    ];
+    saveHistory(merged);
+    setHistoryEntries(merged);
+  };
+
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
     }
     const adminApi = {
       resetDaily,
-      resetPractice: resetPractice
+      resetPractice: resetPractice,
+      seedHistory
     };
     (window as typeof window & { __dyeleAdmin?: typeof adminApi }).__dyeleAdmin =
       adminApi;
@@ -236,6 +320,16 @@ const App = () => {
     setError("");
     setStatus(nextStatus);
     if (mode === "daily") {
+      if (nextStatus !== "playing") {
+        const shareGrid = formatShareGrid(nextGuesses);
+        const nextEntry: HistoryEntry = {
+          dateKey,
+          status: nextStatus,
+          attempts: nextGuesses.length,
+          shareGrid
+        };
+        setHistoryEntries(upsertHistoryEntry(nextEntry));
+      }
       saveGameState(dateKey, {
         dateKey,
         guesses: nextGuesses,
@@ -255,6 +349,16 @@ const App = () => {
     try {
       await navigator.clipboard.writeText(message);
       setShareMessage("Results copied to clipboard.");
+    } catch {
+      window.prompt("Copy your results:", message);
+    }
+  };
+
+  const handleHistoryCopy = async (entry: HistoryEntry) => {
+    const header = `DYELE ${entry.dateKey} ${entry.attempts}/${MAX_ATTEMPTS}`;
+    const message = `${header}\n${entry.shareGrid}`;
+    try {
+      await navigator.clipboard.writeText(message);
     } catch {
       window.prompt("Copy your results:", message);
     }
@@ -405,7 +509,7 @@ const App = () => {
           </Group>
         </Stack>
 
-        <Group justify="space-between" wrap="wrap" mt="auto" pt="xl">
+        <Group justify="space-between" align="top" wrap="wrap" mt="auto" pt="xl">
           <Stack gap={2}>
             <Text
               size="sm"
@@ -422,15 +526,31 @@ const App = () => {
             <Text
               size="sm"
               c="dark"
-              style={{ textDecoration: "underline", cursor: "pointer" }}
+              style={{
+                textDecoration: "underline",
+                cursor: "pointer",
+                marginTop: 6
+              }}
+              onClick={() => setShowHistory(true)}
+            >
+              History
+            </Text>
+            <Text
+              size="sm"
+              c="dark"
+              style={{
+                textDecoration: "underline",
+                cursor: "pointer",
+                marginTop: 6
+              }}
               onClick={() => setShowChangelog(true)}
             >
               Changelog
             </Text>
-            <Text size="sm" c="dimmed">
-              A ByteSrc project
-            </Text>
           </Stack>
+          <Text size="sm" c="dimmed">
+            A ByteSrc project
+          </Text>
           <Button
             component="a"
             href="https://buymeacoffee.com/zaqttack"
@@ -451,6 +571,12 @@ const App = () => {
         <SourcesPlansModal
           opened={showSourcesPlans}
           onClose={() => setShowSourcesPlans(false)}
+        />
+        <HistoryModal
+          opened={showHistory}
+          onClose={() => setShowHistory(false)}
+          entries={historyEntries}
+          onCopy={handleHistoryCopy}
         />
         {showResults ? (
         <ResultsModal

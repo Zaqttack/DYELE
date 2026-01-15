@@ -7,6 +7,7 @@ type ResultsModalProps = {
   target: Dye;
   onClose: () => void;
   onShare: () => void;
+  shareMessage?: string;
   onPractice: () => void;
   isDaily: boolean;
 };
@@ -17,6 +18,7 @@ const ResultsModal = ({
   target,
   onClose,
   onShare,
+  shareMessage,
   onPractice,
   isDaily
 }: ResultsModalProps) => (
@@ -73,6 +75,11 @@ const ResultsModal = ({
           {isDaily ? "Play practice" : "New practice"}
         </Button>
       </Group>
+      {shareMessage ? (
+        <Text size="sm" c="dimmed">
+          {shareMessage}
+        </Text>
+      ) : null}
     </Stack>
   </Modal>
 );

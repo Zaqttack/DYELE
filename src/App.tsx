@@ -57,6 +57,7 @@ const App = () => {
   const [selection, setSelection] = useState("");
   const [error, setError] = useState("");
   const [showResults, setShowResults] = useState(false);
+  const [shareMessage, setShareMessage] = useState("");
   const [resultsDismissed, setResultsDismissed] = useState(false);
   const hydratedRef = useRef(false);
   const [showChangelog, setShowChangelog] = useState(false);
@@ -73,12 +74,14 @@ const App = () => {
       setStatus(saved.status);
       const dismissed = saved.resultsDismissed ?? false;
       setResultsDismissed(dismissed);
-      setShowResults(saved.status !== "playing" && !dismissed);
+    setShowResults(saved.status !== "playing" && !dismissed);
+    setShareMessage("");
     } else {
       setGuesses([]);
       setStatus("playing");
       setShowResults(false);
       setResultsDismissed(false);
+      setShareMessage("");
     }
     setSelection("");
     hydratedRef.current = true;
@@ -106,6 +109,7 @@ const App = () => {
     setSelection("");
     setError("");
     setShowResults(false);
+    setShareMessage("");
   };
 
   const resetPractice = () => {
@@ -121,6 +125,7 @@ const App = () => {
   const returnToDaily = () => {
     setMode("daily");
     setShowResults(false);
+    setShareMessage("");
   };
 
   const resetDaily = () => {
@@ -131,6 +136,7 @@ const App = () => {
     setError("");
     setShowResults(false);
     setResultsDismissed(false);
+    setShareMessage("");
     hydratedRef.current = true;
     saveGameState(dateKey, {
       dateKey,
@@ -199,7 +205,7 @@ const App = () => {
     const message = `${header}\n${grid}`;
     try {
       await navigator.clipboard.writeText(message);
-      setError("Results copied to clipboard.");
+      setShareMessage("Results copied to clipboard.");
     } catch {
       window.prompt("Copy your results:", message);
     }
@@ -219,6 +225,7 @@ const App = () => {
   const canReopenResults = status !== "playing" && !showResults;
   const handleCloseResults = () => {
     setShowResults(false);
+    setShareMessage("");
     if (status !== "playing") {
       setResultsDismissed(true);
       if (mode === "daily") {
@@ -380,15 +387,16 @@ const App = () => {
           entries={CHANGELOG_ENTRIES}
         />
         {showResults ? (
-          <ResultsModal
-            status={status}
-            attempts={guesses.length}
-            target={target}
-            onClose={handleCloseResults}
-            onShare={handleShare}
-            onPractice={startPractice}
-            isDaily={mode === "daily"}
-          />
+        <ResultsModal
+          status={status}
+          attempts={guesses.length}
+          target={target}
+          onClose={handleCloseResults}
+          onShare={handleShare}
+          shareMessage={shareMessage}
+          onPractice={startPractice}
+          isDaily={mode === "daily"}
+        />
         ) : null}
       </Container>
     </Box>

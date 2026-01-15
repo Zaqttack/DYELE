@@ -59,11 +59,13 @@ const App = () => {
   const [showResults, setShowResults] = useState(false);
   const [shareMessage, setShareMessage] = useState("");
   const [resultsDismissed, setResultsDismissed] = useState(false);
-  const hydratedRef = useRef(false);
+  const [hasHydratedDaily, setHasHydratedDaily] = useState(false);
+  const [suppressResultsOpen, setSuppressResultsOpen] = useState(false);
   const [showChangelog, setShowChangelog] = useState(false);
+  const suppressResultsOnceRef = useRef(false);
 
   useEffect(() => {
-    hydratedRef.current = false;
+    setHasHydratedDaily(false);
     if (mode !== "daily") {
       return;
     }
@@ -74,32 +76,44 @@ const App = () => {
       setStatus(saved.status);
       const dismissed = saved.resultsDismissed ?? false;
       setResultsDismissed(dismissed);
-    setShowResults(saved.status !== "playing" && !dismissed);
-    setShareMessage("");
+      setShowResults(false);
+      setShareMessage("");
+      setSuppressResultsOpen(saved.status !== "playing");
+      suppressResultsOnceRef.current = saved.status !== "playing";
     } else {
       setGuesses([]);
       setStatus("playing");
       setShowResults(false);
       setResultsDismissed(false);
       setShareMessage("");
+      setSuppressResultsOpen(false);
+      suppressResultsOnceRef.current = false;
     }
     setSelection("");
-    hydratedRef.current = true;
+    setHasHydratedDaily(true);
   }, [mode, dateKey, dailyTarget]);
 
   useEffect(() => {
-    if (mode !== "daily" || !hydratedRef.current) {
+    if (mode !== "daily" || !hasHydratedDaily) {
       return;
     }
     saveGameState(dateKey, { dateKey, guesses, status, resultsDismissed });
-  }, [dateKey, guesses, mode, resultsDismissed, status]);
+  }, [dateKey, guesses, mode, resultsDismissed, status, hasHydratedDaily]);
 
   useEffect(() => {
     if (status === "won" || status === "lost") {
+      if (suppressResultsOnceRef.current) {
+        suppressResultsOnceRef.current = false;
+        return;
+      }
+      if (suppressResultsOpen) {
+        setSuppressResultsOpen(false);
+        return;
+      }
       setResultsDismissed(false);
       setShowResults(true);
     }
-  }, [status]);
+  }, [status, suppressResultsOpen]);
 
   const startPractice = () => {
     setMode("practice");
@@ -110,6 +124,7 @@ const App = () => {
     setError("");
     setShowResults(false);
     setShareMessage("");
+    setSuppressResultsOpen(false);
   };
 
   const resetPractice = () => {
@@ -120,12 +135,15 @@ const App = () => {
     setError("");
     setShowResults(false);
     setResultsDismissed(false);
+    setShareMessage("");
+    setSuppressResultsOpen(false);
   };
 
   const returnToDaily = () => {
     setMode("daily");
     setShowResults(false);
     setShareMessage("");
+    setSuppressResultsOpen(false);
   };
 
   const resetDaily = () => {
@@ -137,7 +155,7 @@ const App = () => {
     setShowResults(false);
     setResultsDismissed(false);
     setShareMessage("");
-    hydratedRef.current = true;
+    setSuppressResultsOpen(false);
     saveGameState(dateKey, {
       dateKey,
       guesses: [],
@@ -191,7 +209,7 @@ const App = () => {
         dateKey,
         guesses: nextGuesses,
         status: nextStatus,
-        resultsDismissed: false
+        resultsDismissed: nextStatus === "playing" ? resultsDismissed : false
       });
     }
   };

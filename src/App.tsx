@@ -43,8 +43,10 @@ const CHANGELOG_ENTRIES = [
     date: "2026-01-15",
     items: [
       "Daily progress stays saved when you come back.",
-      "New popups for updates and sources.",
-      "Fresh visuals: color swatches and cleaner cards."
+      "New popups for updates, sources, and history.",
+      "Fresh visuals: color swatches and cleaner cards.",
+      "More details in the dye picker to help guide choices.",
+      "History view with shareable past results."
     ]
   },
   {

@@ -16,6 +16,7 @@ import GuessRow from "./components/GuessRow";
 import ResultsModal from "./components/ResultsModal";
 import Countdown from "./components/Countdown";
 import Strikes from "./components/Strikes";
+import ChangeLogModal from "./components/ChangeLogModal";
 import { getChicagoDateKey } from "./lib/date";
 import {
   compareGuessToTarget,
@@ -27,6 +28,15 @@ import type { Dye, GameStatus, Guess } from "./types";
 
 const dyes = dyesData as Dye[];
 const MAX_ATTEMPTS = 4;
+const CHANGELOG_ENTRIES = [
+  {
+    date: "2026-01-13",
+    items: [
+      "Initial public release of DYELE.",
+      "Daily puzzle, practice mode, and share results."
+    ]
+  }
+];
 
 const getRandomDye = (list: Dye[]): Dye => {
   if (window.crypto?.getRandomValues) {
@@ -49,6 +59,7 @@ const App = () => {
   const [showResults, setShowResults] = useState(false);
   const [resultsDismissed, setResultsDismissed] = useState(false);
   const hydratedRef = useRef(false);
+  const [showChangelog, setShowChangelog] = useState(false);
 
   useEffect(() => {
     hydratedRef.current = false;
@@ -338,9 +349,19 @@ const App = () => {
         </Stack>
 
         <Group justify="space-between" wrap="wrap" mt="auto" pt="xl">
-          <Text size="sm" c="dimmed">
-            A ByteSrc project
-          </Text>
+          <Group gap="sm">
+            <Text size="sm" c="dimmed">
+              A ByteSrc project
+            </Text>
+            <Button
+              variant="subtle"
+              color="dark"
+              size="sm"
+              onClick={() => setShowChangelog(true)}
+            >
+              Changelog
+            </Button>
+          </Group>
           <Button
             component="a"
             href="https://buymeacoffee.com/zaqttack"
@@ -353,6 +374,11 @@ const App = () => {
           </Button>
         </Group>
 
+        <ChangeLogModal
+          opened={showChangelog}
+          onClose={() => setShowChangelog(false)}
+          entries={CHANGELOG_ENTRIES}
+        />
         {showResults ? (
           <ResultsModal
             status={status}

@@ -239,9 +239,18 @@ const App = () => {
           >
             Daily dye deduction
           </Text>
-          <Title order={1} ff="Fraunces, serif" size="3rem">
-            DYELE
-          </Title>
+          <Group align="center" gap="sm">
+            <Box
+              component="img"
+              src="/favicon.svg"
+              alt="DYELE color picker"
+              w={40}
+              h={40}
+            />
+            <Title order={1} ff="Fraunces, serif" size="3rem">
+              DYELE
+            </Title>
+          </Group>
           <Text size="lg" c="dimmed">
             Guess the mystery food dye. Match the attribute tiles to uncover the
             daily formula.

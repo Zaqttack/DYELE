@@ -1,4 +1,4 @@
-import { Button, Group, List, Modal, Stack, Text, Title } from "@mantine/core";
+import { Box, Button, Group, List, Modal, Stack, Text, Title } from "@mantine/core";
 import type { Dye, GameStatus } from "../types";
 
 type ResultsModalProps = {
@@ -39,9 +39,23 @@ const ResultsModal = ({
           ? `Solved in ${attempts} attempt${attempts === 1 ? "" : "s"}`
           : "Try again tomorrow"}
       </Title>
-      <Stack gap="xs" p="md" style={{ border: "1px solid rgba(18, 17, 23, 0.1)", borderRadius: 16 }}>
-        <Text fw={600}>{target.displayName}</Text>
-        {target.codeName ? <Text size="sm" c="dimmed">{target.codeName}</Text> : null}
+      <Stack
+        gap="xs"
+        p="md"
+        style={{ border: "1px solid rgba(18, 17, 23, 0.1)", borderRadius: 16 }}
+      >
+        <Group gap="xs" align="center">
+          <Box
+            w={14}
+            h={14}
+            style={{
+              borderRadius: 999,
+              border: "1px solid rgba(18, 17, 23, 0.15)",
+              backgroundColor: target.colorHex ?? "#d0d0d4"
+            }}
+          />
+          <Text fw={600}>{target.displayName}</Text>
+        </Group>
         <List size="sm" spacing="xs">
           {target.facts.map((fact) => (
             <List.Item key={fact}>{fact}</List.Item>

@@ -17,6 +17,7 @@ import ResultsModal from "./components/ResultsModal";
 import Countdown from "./components/Countdown";
 import Strikes from "./components/Strikes";
 import ChangeLogModal from "./components/ChangeLogModal";
+import SourcesPlansModal from "./components/SourcesPlansModal";
 import { getChicagoDateKey } from "./lib/date";
 import {
   compareGuessToTarget,
@@ -62,6 +63,7 @@ const App = () => {
   const [hasHydratedDaily, setHasHydratedDaily] = useState(false);
   const [suppressResultsOpen, setSuppressResultsOpen] = useState(false);
   const [showChangelog, setShowChangelog] = useState(false);
+  const [showSourcesPlans, setShowSourcesPlans] = useState(false);
   const suppressResultsOnceRef = useRef(false);
 
   useEffect(() => {
@@ -396,8 +398,17 @@ const App = () => {
 
         <Group justify="space-between" wrap="wrap" mt="auto" pt="xl">
           <Stack gap={2}>
-            <Text size="sm" c="dimmed">
-              A ByteSrc project
+            <Text
+              size="sm"
+              c="dark"
+              style={{
+                textDecoration: "underline",
+                cursor: "pointer",
+                marginTop: 6
+              }}
+              onClick={() => setShowSourcesPlans(true)}
+            >
+              Sources &amp; plans
             </Text>
             <Text
               size="sm"
@@ -406,6 +417,9 @@ const App = () => {
               onClick={() => setShowChangelog(true)}
             >
               Changelog
+            </Text>
+            <Text size="sm" c="dimmed">
+              A ByteSrc project
             </Text>
           </Stack>
           <Button
@@ -424,6 +438,10 @@ const App = () => {
           opened={showChangelog}
           onClose={() => setShowChangelog(false)}
           entries={CHANGELOG_ENTRIES}
+        />
+        <SourcesPlansModal
+          opened={showSourcesPlans}
+          onClose={() => setShowSourcesPlans(false)}
         />
         {showResults ? (
         <ResultsModal

@@ -349,19 +349,19 @@ const App = () => {
         </Stack>
 
         <Group justify="space-between" wrap="wrap" mt="auto" pt="xl">
-          <Group gap="sm">
+          <Stack gap={2}>
             <Text size="sm" c="dimmed">
               A ByteSrc project
             </Text>
-            <Button
-              variant="subtle"
-              color="dark"
+            <Text
               size="sm"
+              c="dark"
+              style={{ textDecoration: "underline", cursor: "pointer" }}
               onClick={() => setShowChangelog(true)}
             >
               Changelog
-            </Button>
-          </Group>
+            </Text>
+          </Stack>
           <Button
             component="a"
             href="https://buymeacoffee.com/zaqttack"

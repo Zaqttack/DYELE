@@ -4,6 +4,7 @@ import {
   Button,
   Container,
   Group,
+  Menu,
   Paper,
   Stack,
   Switch,
@@ -425,43 +426,69 @@ const App = () => {
       >
         <Stack gap="xl" style={{ flex: 1 }}>
           <Stack gap="sm">
-          <Text
-            size="xs"
-            tt="uppercase"
-            fw={700}
-            c="dimmed"
-            style={{ letterSpacing: "0.4em" }}
-          >
-            Daily dye deduction
-          </Text>
-          <Group align="center" gap="sm">
-            <Box
-              component="img"
-              src="/favicon.svg"
-              alt="DYELE color picker"
-              w={40}
-              h={40}
-            />
-            <Title order={1} ff="Fraunces, serif" size="3rem">
-              DYELE
-            </Title>
-          </Group>
-          <Text size="lg" c="dimmed">
-            Guess the mystery food dye. Match the attribute tiles to uncover the
-            daily formula.
-          </Text>
-          <Group gap="xs">
-            <Badge color="green" variant="light">
-              Match
-            </Badge>
-            <Badge color="yellow" variant="light">
-              Direction hint
-            </Badge>
-            <Badge color="gray" variant="light">
-              No match
-            </Badge>
-          </Group>
-        </Stack>
+            <Group justify="space-between" align="center" wrap="nowrap">
+              <Text
+                size="xs"
+                tt="uppercase"
+                fw={700}
+                c="dimmed"
+                style={{ letterSpacing: "0.4em" }}
+              >
+                Daily dye deduction
+              </Text>
+              <Menu position="bottom-end" width={190} shadow="md">
+                <Menu.Target>
+                  <Button variant="subtle" color="dark" size="sm" style={{ fontSize: 22 }}>
+                    ☰
+                  </Button>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <Menu.Item onClick={() => setShowHistory(true)}>History</Menu.Item>
+                  <Menu.Item
+                    onClick={() => {
+                      setDontShowIntroAgain(getIntroFlag());
+                      setShowIntro(true);
+                    }}
+                  >
+                    How it works
+                  </Menu.Item>
+                  <Menu.Item onClick={() => setShowChangelog(true)}>
+                    Changelog
+                  </Menu.Item>
+                  <Menu.Item onClick={() => setShowSourcesPlans(true)}>
+                    Sources &amp; plans
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
+            </Group>
+            <Group align="center" gap="sm">
+              <Box
+                component="img"
+                src="/favicon.svg"
+                alt="DYELE color picker"
+                w={40}
+                h={40}
+              />
+              <Title order={1} ff="Fraunces, serif" size="3rem">
+                DYELE
+              </Title>
+            </Group>
+            <Text size="lg" c="dimmed">
+              Guess the mystery food dye. Match the attribute tiles to uncover the
+              daily formula.
+            </Text>
+            <Group gap="xs">
+              <Badge color="green" variant="light">
+                Match
+              </Badge>
+              <Badge color="yellow" variant="light">
+                Direction hint
+              </Badge>
+              <Badge color="gray" variant="light">
+                No match
+              </Badge>
+            </Group>
+          </Stack>
 
         <GuessInput
           dyes={dyes}
@@ -529,57 +556,6 @@ const App = () => {
           <Stack gap={2}>
             <Text size="sm" c="dimmed">
               A ByteSrc project
-            </Text>
-            <Text
-              size="sm"
-              c="dark"
-              style={{
-                textDecoration: "underline",
-                cursor: "pointer",
-                marginTop: 6
-              }}
-              onClick={() => setShowHistory(true)}
-            >
-              History
-            </Text>
-            <Text
-              size="sm"
-              c="dark"
-              style={{
-                textDecoration: "underline",
-                cursor: "pointer",
-                marginTop: 6
-              }}
-              onClick={() => {
-                setDontShowIntroAgain(getIntroFlag());
-                setShowIntro(true);
-              }}
-            >
-              How it works
-            </Text>
-            <Text
-              size="sm"
-              c="dark"
-              style={{
-                textDecoration: "underline",
-                cursor: "pointer",
-                marginTop: 6
-              }}
-              onClick={() => setShowChangelog(true)}
-            >
-              Changelog
-            </Text>
-            <Text
-              size="sm"
-              c="dark"
-              style={{
-                textDecoration: "underline",
-                cursor: "pointer",
-                marginTop: 6
-              }}
-              onClick={() => setShowSourcesPlans(true)}
-            >
-              Sources &amp; plans
             </Text>
           </Stack>
           <Button

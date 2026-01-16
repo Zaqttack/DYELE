@@ -297,6 +297,26 @@ const App = () => {
         isPractice: false,
         completedAt: `${dateKeyForEntry}T12:00:00.000Z`
       });
+
+      if (Math.random() > 0.5) {
+        const practiceAttempts = Math.floor(Math.random() * MAX_ATTEMPTS) + 1;
+        const practiceRows = Array.from({ length: practiceAttempts }, () =>
+          Array.from({ length: 4 }, () => emojis[Math.floor(Math.random() * 3)]).join("")
+        );
+        const practiceCompletedAt = new Date();
+        practiceCompletedAt.setDate(practiceCompletedAt.getDate() - i);
+        practiceCompletedAt.setHours(10 + (i % 10), 15, 0, 0);
+        const practiceCompletedIso = practiceCompletedAt.toISOString();
+
+        seeded.push({
+          dateKey: practiceCompletedIso,
+          status: Math.random() > 0.2 ? "won" : "lost",
+          attempts: practiceAttempts,
+          shareGrid: practiceRows.join("\n"),
+          isPractice: true,
+          completedAt: practiceCompletedIso
+        });
+      }
     }
 
     const merged = [

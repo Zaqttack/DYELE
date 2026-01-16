@@ -25,4 +25,5 @@ In the browser DevTools console, you can reset progress while testing:
 ```js
 window.__dyeleAdmin.resetDaily()
 window.__dyeleAdmin.resetPractice()
+window.__dyeleAdmin.seedHistory(7)
 ```

@@ -154,7 +154,8 @@ const App = () => {
         dateKey: state.dateKey,
         status: state.status,
         attempts: state.guesses.length,
-        shareGrid: formatShareGrid(state.guesses)
+        shareGrid: formatShareGrid(state.guesses),
+        isPractice: false
       }))
       .sort((a, b) => b.dateKey.localeCompare(a.dateKey));
     if (migrated.length > 0) {
@@ -283,7 +284,8 @@ const App = () => {
         dateKey: dateKeyForEntry,
         status: Math.random() > 0.25 ? "won" : "lost",
         attempts,
-        shareGrid: rows.join("\n")
+        shareGrid: rows.join("\n"),
+        isPractice: false
       });
     }
 
@@ -361,17 +363,20 @@ const App = () => {
     setError("");
     setHelperMessage("");
     setStatus(nextStatus);
+    if (nextStatus !== "playing") {
+      const shareGrid = formatShareGrid(nextGuesses);
+      const entryDateKey =
+        mode === "practice" ? new Date().toISOString() : dateKey;
+      const nextEntry: HistoryEntry = {
+        dateKey: entryDateKey,
+        status: nextStatus,
+        attempts: nextGuesses.length,
+        shareGrid,
+        isPractice: mode === "practice"
+      };
+      setHistoryEntries(upsertHistoryEntry(nextEntry));
+    }
     if (mode === "daily") {
-      if (nextStatus !== "playing") {
-        const shareGrid = formatShareGrid(nextGuesses);
-        const nextEntry: HistoryEntry = {
-          dateKey,
-          status: nextStatus,
-          attempts: nextGuesses.length,
-          shareGrid
-        };
-        setHistoryEntries(upsertHistoryEntry(nextEntry));
-      }
       saveGameState(dateKey, {
         dateKey,
         guesses: nextGuesses,
@@ -397,7 +402,9 @@ const App = () => {
   };
 
   const handleHistoryCopy = async (entry: HistoryEntry) => {
-    const header = `DYELE ${entry.dateKey} ${entry.attempts}/${MAX_ATTEMPTS}`;
+    const header = entry.isPractice
+      ? `DYELE Practice ${entry.attempts}/${MAX_ATTEMPTS}`
+      : `DYELE ${entry.dateKey} ${entry.attempts}/${MAX_ATTEMPTS}`;
     const message = `${header}\n${entry.shareGrid}`;
     try {
       await navigator.clipboard.writeText(message);

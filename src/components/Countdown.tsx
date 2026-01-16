@@ -1,4 +1,4 @@
-import { Paper, Text } from "@mantine/core";
+import { Text } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { getMsUntilChicagoMidnight } from "../lib/date";
 

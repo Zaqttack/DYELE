@@ -69,4 +69,5 @@ export type HistoryEntry = {
   status: GameStatus;
   attempts: number;
   shareGrid: string;
+  isPractice?: boolean;
 };

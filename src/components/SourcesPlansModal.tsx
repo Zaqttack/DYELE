@@ -79,6 +79,9 @@ const SourcesPlansModal = ({ opened, onClose }: SourcesPlansModalProps) => (
             <List.Item>Recalculation for daily dye decisions</List.Item>
             <List.Item>Add more dyes to increase the difficulty</List.Item>
             <List.Item>Refine attribute weighting and difficulty tiers</List.Item>
+            <List.Item>Add a "Learn Mode"</List.Item>
+            <List.Item>Shareable practice seeds</List.Item>
+            <List.Item>Difficulty modifiers during practice</List.Item>
           </List>
         </Stack>
       </Stack>

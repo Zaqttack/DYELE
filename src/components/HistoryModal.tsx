@@ -48,8 +48,17 @@ const formatPracticeDate = (entry: HistoryEntry): string => {
   });
 };
 
+const HISTORY_FILTER_KEY = "dyele:history:hide-practice";
+
+const loadHidePractice = (): boolean => {
+  if (typeof window === "undefined") {
+    return false;
+  }
+  return window.localStorage.getItem(HISTORY_FILTER_KEY) === "1";
+};
+
 const HistoryModal = ({ opened, onClose, entries, onCopy }: HistoryModalProps) => {
-  const [hidePractice, setHidePractice] = useState(false);
+  const [hidePractice, setHidePractice] = useState(loadHidePractice);
   const dailyEntries = useMemo(
     () => entries.filter((entry) => !entry.isPractice),
     [entries]
@@ -99,7 +108,16 @@ const HistoryModal = ({ opened, onClose, entries, onCopy }: HistoryModalProps) =
           <Checkbox
             label="Hide practice games"
             checked={hidePractice}
-            onChange={(event) => setHidePractice(event.currentTarget.checked)}
+            onChange={(event) => {
+              const nextValue = event.currentTarget.checked;
+              setHidePractice(nextValue);
+              if (typeof window !== "undefined") {
+                window.localStorage.setItem(
+                  HISTORY_FILTER_KEY,
+                  nextValue ? "1" : "0"
+                );
+              }
+            }}
           />
           {visibleEntries.length === 0 ? (
             <Text size="sm" c="dimmed">

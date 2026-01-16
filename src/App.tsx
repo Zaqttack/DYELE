@@ -533,11 +533,7 @@ const App = () => {
           <Paper radius="lg" p="md" withBorder>
             <Group justify="space-between" align="center" wrap="nowrap">
               {mode === "practice" 
-                ? (
-                <Button variant="outline" color="dark" onClick={resetPractice} size="sm">
-                  New DYELE
-                </Button>
-                ) 
+                ? (<Button variant="outline" color="dark" onClick={resetPractice} size="sm">New DYELE</Button>) 
                 : <Countdown onDayReset={handleDailyReset} />
               }
               <Switch
@@ -545,7 +541,11 @@ const App = () => {
                 onChange={(event) =>
                   event.currentTarget.checked ? startPractice() : returnToDaily()
                 }
-                label="Practice mode"
+                label={
+                  <Text size="sm" style={{ fontSize: "clamp(12px, 3.2vw, 14px)" }}>
+                    Practice mode
+                  </Text>
+                }
                 size="sm"
               />
             </Group>

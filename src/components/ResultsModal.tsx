@@ -1,4 +1,5 @@
 import { Box, Button, Group, List, Modal, Stack, Text, Title } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import type { Dye, GameStatus } from "../types";
 
 const ExternalLinkIcon = () => (
@@ -39,8 +40,11 @@ const ResultsModal = ({
   shareMessage,
   onPractice,
   isDaily
-}: ResultsModalProps) => (
-  <Modal
+}: ResultsModalProps) => {
+  const isMobile = useMediaQuery("(max-width: 600px)");
+
+  return (
+    <Modal
     opened
     onClose={onClose}
     centered
@@ -52,7 +56,7 @@ const ResultsModal = ({
         {status === "won" ? "You solved it" : "Out of guesses"}
       </Text>
     }
-  >
+    >
     <Stack gap="md">
       <Title order={2} ff="Fraunces, serif">
         {status === "won"
@@ -102,14 +106,31 @@ const ResultsModal = ({
           ))}
         </Text>
       </Stack>
-      <Group grow>
-        <Button radius="md" color="dark" onClick={onShare}>
-          Share results
-        </Button>
-        <Button radius="md" variant="outline" color="dark" onClick={onPractice}>
-          {isDaily ? "Practice Mode" : "New DYELE"}
-        </Button>
-      </Group>
+      {isMobile ? (
+        <Stack gap={10} style={{ width: "100%" }}>
+          <Button radius="md" color="dark" onClick={onShare} fullWidth>
+            Share results
+          </Button>
+          <Button
+            radius="md"
+            variant="outline"
+            color="dark"
+            onClick={onPractice}
+            fullWidth
+          >
+            {isDaily ? "Practice Mode" : "New DYELE"}
+          </Button>
+        </Stack>
+      ) : (
+        <Group grow style={{ gap: 10, width: "100%" }}>
+          <Button radius="md" color="dark" onClick={onShare}>
+            Share results
+          </Button>
+          <Button radius="md" variant="outline" color="dark" onClick={onPractice}>
+            {isDaily ? "Practice Mode" : "New DYELE"}
+          </Button>
+        </Group>
+      )}
       {shareMessage ? (
         <Text size="sm" c="dimmed">
           {shareMessage}
@@ -117,6 +138,7 @@ const ResultsModal = ({
       ) : null}
     </Stack>
   </Modal>
-);
+  );
+};
 
 export default ResultsModal;

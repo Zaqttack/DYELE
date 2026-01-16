@@ -30,14 +30,12 @@ const Countdown = ({ onDayReset }: CountdownProps) => {
   }, [onDayReset]);
 
   return (
-    <Paper radius="md" px="md" py="sm" withBorder>
-      <Text size="sm">
-        Next DYELE in{" "}
-        <Text span fw={600}>
-          {formatCountdown(remaining)}
-        </Text>
+    <Text size="sm" style={{ fontSize: "clamp(12px, 3.2vw, 14px)" }}>
+      Next DYELE in{" "}
+      <Text span fw={600}>
+        {formatCountdown(remaining)}
       </Text>
-    </Paper>
+    </Text>
   );
 };
 

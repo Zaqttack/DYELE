@@ -107,7 +107,7 @@ const ResultsModal = ({
           Share results
         </Button>
         <Button radius="md" variant="outline" color="dark" onClick={onPractice}>
-          {isDaily ? "Practice Mode" : "New DYELE Game"}
+          {isDaily ? "Practice Mode" : "New DYELE"}
         </Button>
       </Group>
       {shareMessage ? (

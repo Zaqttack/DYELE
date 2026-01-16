@@ -4,6 +4,7 @@ import {
   Button,
   Container,
   Group,
+  Paper,
   Stack,
   Switch,
   Text,
@@ -480,11 +481,16 @@ const App = () => {
             ))}
           </Stack>
 
-          <Group justify="space-between" align="center" wrap="wrap">
-            <Box>
-              {mode === "daily" ? <Countdown onDayReset={handleDailyReset} /> : null}
-            </Box>
-            <Group align="center" gap="sm" wrap="nowrap">
+          <Paper radius="lg" p="md" withBorder>
+            <Group justify="space-between" align="center" wrap="nowrap">
+              {mode === "practice" 
+                ? (
+                <Button variant="outline" color="dark" onClick={resetPractice} size="sm">
+                  New DYELE
+                </Button>
+                ) 
+                : <Countdown onDayReset={handleDailyReset} />
+              }
               <Switch
                 checked={mode === "practice"}
                 onChange={(event) =>
@@ -493,26 +499,15 @@ const App = () => {
                 label="Practice mode"
                 size="sm"
               />
-              <Box style={{ minWidth: 140 }}>
-                <Button
-                  variant="outline"
-                  color="dark"
-                  onClick={resetPractice}
-                  size="sm"
-                  fullWidth
-                  style={{
-                    visibility: mode === "practice" ? "visible" : "hidden"
-                  }}
-                >
-                  Reset practice
-                </Button>
-              </Box>
             </Group>
-          </Group>
+          </Paper>
         </Stack>
 
         <Group justify="space-between" align="top" wrap="wrap" mt="auto" pt="xl">
           <Stack gap={2}>
+            <Text size="sm" c="dimmed">
+              A ByteSrc project
+            </Text>
             <Text
               size="sm"
               c="dark"
@@ -550,9 +545,6 @@ const App = () => {
               Changelog
             </Text>
           </Stack>
-          <Text size="sm" c="dimmed">
-            A ByteSrc project
-          </Text>
           <Button
             component="a"
             href="https://buymeacoffee.com/zaqttack"

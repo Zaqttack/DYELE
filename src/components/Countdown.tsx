@@ -32,7 +32,7 @@ const Countdown = ({ onDayReset }: CountdownProps) => {
   return (
     <Paper radius="md" px="md" py="sm" withBorder>
       <Text size="sm">
-        Next puzzle in{" "}
+        Next DYELE in{" "}
         <Text span fw={600}>
           {formatCountdown(remaining)}
         </Text>

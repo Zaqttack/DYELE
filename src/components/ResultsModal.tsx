@@ -61,7 +61,7 @@ const ResultsModal = ({
       <Title order={2} ff="Fraunces, serif">
         {status === "won"
           ? `Solved in ${attempts} attempt${attempts === 1 ? "" : "s"}`
-          : "Try again tomorrow"}
+          : `Try again ${isDaily ? "tomorrow" : "!"}`}
       </Title>
       <Stack
         gap="xs"

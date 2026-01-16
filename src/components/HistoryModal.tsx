@@ -11,7 +11,7 @@ import {
   Text,
   Title
 } from "@mantine/core";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import type { HistoryEntry } from "../types";
 
 type HistoryModalProps = {
@@ -59,15 +59,14 @@ const loadHidePractice = (): boolean => {
 
 const HistoryModal = ({ opened, onClose, entries, onCopy }: HistoryModalProps) => {
   const [hidePractice, setHidePractice] = useState(loadHidePractice);
-  const dailyEntries = useMemo(
-    () => entries.filter((entry) => !entry.isPractice),
-    [entries]
-  );
   const sortedEntries = [...entries].sort((a, b) =>
     b.dateKey.localeCompare(a.dateKey)
   );
-  const wins = dailyEntries.filter((entry) => entry.status === "won").length;
-  const losses = dailyEntries.filter((entry) => entry.status === "lost").length;
+  const countedEntries = hidePractice
+    ? entries.filter((entry) => !entry.isPractice)
+    : entries;
+  const wins = countedEntries.filter((entry) => entry.status === "won").length;
+  const losses = countedEntries.filter((entry) => entry.status === "lost").length;
   const practicePlays = entries.filter((entry) => entry.isPractice).length;
   const visibleEntries = hidePractice
     ? sortedEntries.filter((entry) => !entry.isPractice)

@@ -16,6 +16,7 @@ type GuessInputProps = {
   value: string;
   disabled?: boolean;
   error?: string;
+  helperMessage?: string;
   onChange: (value: string) => void;
   onSubmit: () => void;
 };
@@ -27,6 +28,7 @@ const GuessInput = ({
   value,
   disabled,
   error,
+  helperMessage,
   onChange,
   onSubmit
 }: GuessInputProps) => {
@@ -132,6 +134,10 @@ const GuessInput = ({
         {error ? (
           <Text size="sm" c="red.7" fw={600}>
             {error}
+          </Text>
+        ) : helperMessage ? (
+          <Text size="sm" c="dimmed">
+            {helperMessage}
           </Text>
         ) : null}
       </Stack>

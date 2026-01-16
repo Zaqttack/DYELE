@@ -79,6 +79,7 @@ const App = () => {
   const [error, setError] = useState("");
   const [showResults, setShowResults] = useState(false);
   const [shareMessage, setShareMessage] = useState("");
+  const [helperMessage, setHelperMessage] = useState("");
   const [resultsDismissed, setResultsDismissed] = useState(false);
   const [hasHydratedDaily, setHasHydratedDaily] = useState(false);
   const [suppressResultsOpen, setSuppressResultsOpen] = useState(false);
@@ -102,6 +103,7 @@ const App = () => {
       setResultsDismissed(dismissed);
       setShowResults(false);
       setShareMessage("");
+      setHelperMessage("");
       setSuppressResultsOpen(saved.status !== "playing");
       suppressResultsOnceRef.current = saved.status !== "playing";
     } else {
@@ -110,6 +112,7 @@ const App = () => {
       setShowResults(false);
       setResultsDismissed(false);
       setShareMessage("");
+      setHelperMessage("");
       setSuppressResultsOpen(false);
       suppressResultsOnceRef.current = false;
     }
@@ -175,6 +178,7 @@ const App = () => {
     setError("");
     setShowResults(false);
     setShareMessage("");
+    setHelperMessage("");
     setSuppressResultsOpen(false);
   };
 
@@ -187,6 +191,7 @@ const App = () => {
     setShowResults(false);
     setResultsDismissed(false);
     setShareMessage("");
+    setHelperMessage("Practice reset. A new dye has been chosen.");
     setSuppressResultsOpen(false);
   };
 
@@ -194,6 +199,7 @@ const App = () => {
     setMode("daily");
     setShowResults(false);
     setShareMessage("");
+    setHelperMessage("");
     setSuppressResultsOpen(false);
   };
 
@@ -206,6 +212,7 @@ const App = () => {
     setShowResults(false);
     setResultsDismissed(false);
     setShareMessage("");
+    setHelperMessage("");
     setSuppressResultsOpen(false);
     saveGameState(dateKey, {
       dateKey,
@@ -321,6 +328,7 @@ const App = () => {
     setGuesses(nextGuesses);
     setSelection("");
     setError("");
+    setHelperMessage("");
     setStatus(nextStatus);
     if (mode === "daily") {
       if (nextStatus !== "playing") {
@@ -451,6 +459,7 @@ const App = () => {
           onSubmit={handleSubmit}
           disabled={isLocked}
           error={error}
+          helperMessage={helperMessage}
         />
 
           <Stack gap="md">

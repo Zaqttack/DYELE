@@ -39,9 +39,9 @@ const SourcesPlansModal = ({ opened, onClose }: SourcesPlansModalProps) => (
             Sources
           </Title>
           <Text size="sm" c="dimmed">
-            The current dataset focuses on USA FDA-certified synthetic dyes. Facts
-            are summarized from public sources to keep gameplay consistent and
-            approachable.
+            The current dataset highlights commonly discussed synthetic dyes in
+            U.S. foods. Facts are summarized from public sources so the game stays
+            consistent and approachable.
           </Text>
           <List size="sm" spacing="xs">
             <List.Item>
@@ -57,7 +57,16 @@ const SourcesPlansModal = ({ opened, onClose }: SourcesPlansModalProps) => (
               </a>
             </List.Item>
             <List.Item>
-              FDA-certified color additives for foods and ingested drugs
+              FDA color additive status list (official inventory)
+              <a
+                href="https://www.fda.gov/industry/color-additive-inventories/color-additive-status-list"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Open FDA color additive status list"
+                style={{ marginLeft: 6 }}
+              >
+                <ExternalLinkIcon />
+              </a>
             </List.Item>
           </List>
         </Stack>
@@ -69,6 +78,10 @@ const SourcesPlansModal = ({ opened, onClose }: SourcesPlansModalProps) => (
           <List size="sm" spacing="xs">
             <List.Item>Recalculation for daily dye decisions</List.Item>
             <List.Item>Add more dyes to increase the difficulty</List.Item>
+            <List.Item>
+              Create local user history so players can review and replay previous
+              days
+            </List.Item>
             <List.Item>Refine attribute weighting and difficulty tiers</List.Item>
             <List.Item>Improve share formatting and session analytics</List.Item>
           </List>

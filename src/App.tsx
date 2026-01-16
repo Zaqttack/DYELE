@@ -20,6 +20,7 @@ import Strikes from "./components/Strikes";
 import ChangeLogModal from "./components/ChangeLogModal";
 import SourcesPlansModal from "./components/SourcesPlansModal";
 import HistoryModal from "./components/HistoryModal";
+import IntroModal from "./components/IntroModal";
 import { getChicagoDateKey } from "./lib/date";
 import {
   compareGuessToTarget,
@@ -87,6 +88,8 @@ const App = () => {
   const [showSourcesPlans, setShowSourcesPlans] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [historyEntries, setHistoryEntries] = useState<HistoryEntry[]>([]);
+  const [showIntro, setShowIntro] = useState(false);
+  const [dontShowIntroAgain, setDontShowIntroAgain] = useState(false);
   const suppressResultsOnceRef = useRef(false);
 
   useEffect(() => {
@@ -120,10 +123,20 @@ const App = () => {
     setHasHydratedDaily(true);
   }, [mode, dateKey, dailyTarget]);
 
+  const getIntroFlag = (): boolean => {
+    if (typeof window === "undefined") {
+      return false;
+    }
+    return window.localStorage.getItem("dyele:intro-dismissed") === "1";
+  };
+
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
     }
+    const dismissed = getIntroFlag();
+    setDontShowIntroAgain(dismissed);
+    setShowIntro(!dismissed);
     const existing = loadHistory();
     if (existing.length > 0) {
       setHistoryEntries(existing);
@@ -525,18 +538,6 @@ const App = () => {
                 cursor: "pointer",
                 marginTop: 6
               }}
-              onClick={() => setShowSourcesPlans(true)}
-            >
-              Sources &amp; plans
-            </Text>
-            <Text
-              size="sm"
-              c="dark"
-              style={{
-                textDecoration: "underline",
-                cursor: "pointer",
-                marginTop: 6
-              }}
               onClick={() => setShowHistory(true)}
             >
               History
@@ -549,9 +550,36 @@ const App = () => {
                 cursor: "pointer",
                 marginTop: 6
               }}
+              onClick={() => {
+                setDontShowIntroAgain(getIntroFlag());
+                setShowIntro(true);
+              }}
+            >
+              How it works
+            </Text>
+            <Text
+              size="sm"
+              c="dark"
+              style={{
+                textDecoration: "underline",
+                cursor: "pointer",
+                marginTop: 6
+              }}
               onClick={() => setShowChangelog(true)}
             >
               Changelog
+            </Text>
+            <Text
+              size="sm"
+              c="dark"
+              style={{
+                textDecoration: "underline",
+                cursor: "pointer",
+                marginTop: 6
+              }}
+              onClick={() => setShowSourcesPlans(true)}
+            >
+              Sources &amp; plans
             </Text>
           </Stack>
           <Button
@@ -580,6 +608,19 @@ const App = () => {
           onClose={() => setShowHistory(false)}
           entries={historyEntries}
           onCopy={handleHistoryCopy}
+        />
+        <IntroModal
+          opened={showIntro}
+          dontShowAgain={dontShowIntroAgain}
+          onToggleDontShowAgain={(value) => {
+            setDontShowIntroAgain(value);
+            if (typeof window !== "undefined") {
+              window.localStorage.setItem("dyele:intro-dismissed", value ? "1" : "0");
+            }
+          }}
+          onClose={() => {
+            setShowIntro(false);
+          }}
         />
         {showResults ? (
         <ResultsModal

@@ -44,6 +44,14 @@ const dyes = dyesData as Dye[];
 const MAX_ATTEMPTS = 4;
 const CHANGELOG_ENTRIES = [
   {
+    date: "2026-01-16",
+    items: [
+      "Added a quick stats snapshot in your history.",
+      "Win celebration confetti on successful guesses!",
+      "New intro guide so first-time players know what to expect."
+    ]
+  },
+  {
     date: "2026-01-15",
     items: [
       "Daily progress stays saved when you come back.",
@@ -498,7 +506,7 @@ const App = () => {
               </Title>
             </Group>
             <Text size="lg" c="dimmed">
-              Guess the mystery food dye. Match the attribute tiles to uncover the
+              Guess the mystery dye. Match the attribute tiles to uncover the
               daily formula.
             </Text>
             <Group gap="xs">

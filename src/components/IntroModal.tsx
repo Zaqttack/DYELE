@@ -30,7 +30,7 @@ const IntroModal = ({
           Premise
         </Title>
         <Text size="sm" c="dimmed">
-          DYELE is a daily deduction game where you guess a mystery food dye. Each
+          DYELE is a daily deduction game where you guess a mystery dye. Each
           guess returns attribute feedback so you can narrow it down.
         </Text>
       </Stack>

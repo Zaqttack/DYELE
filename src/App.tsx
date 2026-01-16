@@ -12,6 +12,7 @@ import {
   Title
 } from "@mantine/core";
 import { useMemo, useState, useEffect, useRef } from "react";
+import confetti from "canvas-confetti";
 import dyesData from "./data/dyes.json";
 import GuessInput from "./components/GuessInput";
 import GuessRow from "./components/GuessRow";
@@ -92,6 +93,7 @@ const App = () => {
   const [showIntro, setShowIntro] = useState(false);
   const [dontShowIntroAgain, setDontShowIntroAgain] = useState(false);
   const suppressResultsOnceRef = useRef(false);
+  const confettiFiredRef = useRef(false);
 
   useEffect(() => {
     setHasHydratedDaily(false);
@@ -110,6 +112,7 @@ const App = () => {
       setHelperMessage("");
       setSuppressResultsOpen(saved.status !== "playing");
       suppressResultsOnceRef.current = saved.status !== "playing";
+      confettiFiredRef.current = saved.status === "won";
     } else {
       setGuesses([]);
       setStatus("playing");
@@ -119,6 +122,7 @@ const App = () => {
       setHelperMessage("");
       setSuppressResultsOpen(false);
       suppressResultsOnceRef.current = false;
+      confettiFiredRef.current = false;
     }
     setSelection("");
     setHasHydratedDaily(true);
@@ -178,6 +182,14 @@ const App = () => {
         setSuppressResultsOpen(false);
         return;
       }
+      if (status === "won" && !confettiFiredRef.current) {
+        confettiFiredRef.current = true;
+        confetti({
+          particleCount: 140,
+          spread: 80,
+          origin: { y: 0.6 }
+        });
+      }
       setResultsDismissed(false);
       setShowResults(true);
     }
@@ -194,6 +206,7 @@ const App = () => {
     setShareMessage("");
     setHelperMessage("");
     setSuppressResultsOpen(false);
+    confettiFiredRef.current = false;
   };
 
   const resetPractice = () => {
@@ -207,6 +220,7 @@ const App = () => {
     setShareMessage("");
     setHelperMessage("Practice reset. A new dye has been chosen.");
     setSuppressResultsOpen(false);
+    confettiFiredRef.current = false;
   };
 
   const returnToDaily = () => {
@@ -215,6 +229,7 @@ const App = () => {
     setShareMessage("");
     setHelperMessage("");
     setSuppressResultsOpen(false);
+    confettiFiredRef.current = false;
   };
 
   const resetDaily = () => {
@@ -228,6 +243,7 @@ const App = () => {
     setShareMessage("");
     setHelperMessage("");
     setSuppressResultsOpen(false);
+    confettiFiredRef.current = false;
     saveGameState(dateKey, {
       dateKey,
       guesses: [],
@@ -313,6 +329,7 @@ const App = () => {
     setShareMessage("");
     setSuppressResultsOpen(false);
     setHasHydratedDaily(false);
+    confettiFiredRef.current = false;
   };
 
   const handleSubmit = () => {

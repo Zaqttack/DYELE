@@ -23,7 +23,7 @@ const IntroModal = ({
   dontShowAgain,
   onToggleDontShowAgain
 }: IntroModalProps) => (
-  <Modal opened={opened} onClose={onClose} centered size="lg" radius="lg" title="How it works">
+  <Modal opened={opened} onClose={onClose} centered size="lg" radius="lg" title="How it Works">
     <Stack gap="md">
       <Stack gap="xs">
         <Title order={4} ff="Fraunces, serif">

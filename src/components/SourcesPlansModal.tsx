@@ -78,10 +78,6 @@ const SourcesPlansModal = ({ opened, onClose }: SourcesPlansModalProps) => (
           <List size="sm" spacing="xs">
             <List.Item>Recalculation for daily dye decisions</List.Item>
             <List.Item>Add more dyes to increase the difficulty</List.Item>
-            <List.Item>
-              Create local user history so players can review and replay previous
-              days
-            </List.Item>
             <List.Item>Refine attribute weighting and difficulty tiers</List.Item>
             <List.Item>Improve share formatting and session analytics</List.Item>
           </List>

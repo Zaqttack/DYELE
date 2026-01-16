@@ -482,13 +482,13 @@ const App = () => {
                       setShowIntro(true);
                     }}
                   >
-                    How it works
+                    How it Works
+                  </Menu.Item>
+                  <Menu.Item onClick={() => setShowSourcesPlans(true)}>
+                    Sources &amp; Plans
                   </Menu.Item>
                   <Menu.Item onClick={() => setShowChangelog(true)}>
                     Changelog
-                  </Menu.Item>
-                  <Menu.Item onClick={() => setShowSourcesPlans(true)}>
-                    Sources &amp; plans
                   </Menu.Item>
                 </Menu.Dropdown>
               </Menu>

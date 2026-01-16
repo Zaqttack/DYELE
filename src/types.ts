@@ -70,4 +70,5 @@ export type HistoryEntry = {
   attempts: number;
   shareGrid: string;
   isPractice?: boolean;
+  completedAt?: string;
 };

@@ -1,6 +1,7 @@
 import {
   Badge,
   Button,
+  Checkbox,
   Group,
   Modal,
   Paper,
@@ -10,6 +11,7 @@ import {
   Text,
   Title
 } from "@mantine/core";
+import { useMemo, useState } from "react";
 import type { HistoryEntry } from "../types";
 
 type HistoryModalProps = {
@@ -19,29 +21,48 @@ type HistoryModalProps = {
   onCopy: (entry: HistoryEntry) => void;
 };
 
-const formatEntryDate = (entry: HistoryEntry): string => {
-  if (!entry.isPractice) {
-    return entry.dateKey;
-  }
-  const parsed = new Date(entry.dateKey);
+const formatDailyDate = (dateKey: string): string => {
+  const parsed = new Date(`${dateKey}T00:00:00`);
   if (Number.isNaN(parsed.getTime())) {
-    return entry.dateKey;
+    return dateKey;
+  }
+  return parsed.toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric"
+  });
+};
+
+const formatPracticeDate = (entry: HistoryEntry): string => {
+  const raw = entry.completedAt ?? entry.dateKey;
+  const parsed = new Date(raw);
+  if (Number.isNaN(parsed.getTime())) {
+    return raw;
   }
   return parsed.toLocaleString(undefined, {
     month: "short",
     day: "numeric",
+    year: "numeric",
     hour: "numeric",
     minute: "2-digit"
   });
 };
 
 const HistoryModal = ({ opened, onClose, entries, onCopy }: HistoryModalProps) => {
+  const [hidePractice, setHidePractice] = useState(false);
+  const dailyEntries = useMemo(
+    () => entries.filter((entry) => !entry.isPractice),
+    [entries]
+  );
   const sortedEntries = [...entries].sort((a, b) =>
     b.dateKey.localeCompare(a.dateKey)
   );
-  const wins = entries.filter((entry) => entry.status === "won").length;
-  const losses = entries.filter((entry) => entry.status === "lost").length;
+  const wins = dailyEntries.filter((entry) => entry.status === "won").length;
+  const losses = dailyEntries.filter((entry) => entry.status === "lost").length;
   const practicePlays = entries.filter((entry) => entry.isPractice).length;
+  const visibleEntries = hidePractice
+    ? sortedEntries.filter((entry) => !entry.isPractice)
+    : sortedEntries;
 
   return (
     <Modal opened={opened} onClose={onClose} centered size="lg" radius="lg" title="History">
@@ -75,17 +96,24 @@ const HistoryModal = ({ opened, onClose, entries, onCopy }: HistoryModalProps) =
               </Stack>
             </SimpleGrid>
           </Paper>
-          {sortedEntries.length === 0 ? (
+          <Checkbox
+            label="Hide practice games"
+            checked={hidePractice}
+            onChange={(event) => setHidePractice(event.currentTarget.checked)}
+          />
+          {visibleEntries.length === 0 ? (
             <Text size="sm" c="dimmed">
               No history yet. Finish a daily puzzle to see it here.
             </Text>
           ) : null}
-          {sortedEntries.map((entry) => (
+          {visibleEntries.map((entry) => (
             <Paper key={entry.dateKey} withBorder radius="md" p="md">
-              <Group justify="space-between" align="center" mb="sm">
+              <Stack gap="xs" mb="sm">
                 <Group gap="xs">
                   <Title order={5} ff="Fraunces, serif">
-                    {formatEntryDate(entry)}
+                    {entry.isPractice
+                      ? formatPracticeDate(entry)
+                      : formatDailyDate(entry.dateKey)}
                   </Title>
                   <Badge color={entry.status === "won" ? "green" : "gray"} variant="light">
                     {entry.status === "won" ? "Solved" : "Missed"}
@@ -99,16 +127,21 @@ const HistoryModal = ({ opened, onClose, entries, onCopy }: HistoryModalProps) =
                     {entry.attempts}/4 attempts
                   </Text>
                 </Group>
+              </Stack>
+              <Group justify="space-between" align="flex-end" mt="sm">
+                <Text
+                  size="sm"
+                  style={{
+                    whiteSpace: "pre",
+                    fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace"
+                  }}
+                >
+                  {entry.shareGrid}
+                </Text>
                 <Button variant="light" color="dark" size="xs" onClick={() => onCopy(entry)}>
                   Copy
                 </Button>
               </Group>
-              <Text
-                size="sm"
-                style={{ whiteSpace: "pre", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace" }}
-              >
-                {entry.shareGrid}
-              </Text>
             </Paper>
           ))}
         </Stack>

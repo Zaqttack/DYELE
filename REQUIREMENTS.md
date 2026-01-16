@@ -207,3 +207,11 @@ Practice mode:
 - Share-to-clipboard summary
 - `README.md` with run instructions + data disclaimers
 
+---
+
+## Dye categories
+- risks?
+- solubility?
+- consumable? (once it's more than food dyes)
+- toxicity
+- FDA/Goc approved?

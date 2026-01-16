@@ -44,15 +44,15 @@ const dyes = dyesData as Dye[];
 const MAX_ATTEMPTS = 4;
 const CHANGELOG_ENTRIES = [
   {
-    date: "2026-01-16",
+    date: "Jan 16, 2026",
     items: [
       "Added a quick stats snapshot in your history.",
-      "Win celebration confetti on successful guesses!",
+      "Win celebration confetti on successful guesses.",
       "New intro guide so first-time players know what to expect."
     ]
   },
   {
-    date: "2026-01-15",
+    date: "Jan 15, 2026",
     items: [
       "Daily progress stays saved when you come back.",
       "New popups for updates, sources, and history.",
@@ -62,7 +62,7 @@ const CHANGELOG_ENTRIES = [
     ]
   },
   {
-    date: "2026-01-14",
+    date: "Jan 14, 2026",
     items: [
       "Initial public release of DYELE.",
       "Daily puzzle, practice mode, and share results."
@@ -163,7 +163,8 @@ const App = () => {
         status: state.status,
         attempts: state.guesses.length,
         shareGrid: formatShareGrid(state.guesses),
-        isPractice: false
+        isPractice: false,
+        completedAt: state.dateKey ? `${state.dateKey}T00:00:00.000Z` : undefined
       }))
       .sort((a, b) => b.dateKey.localeCompare(a.dateKey));
     if (migrated.length > 0) {
@@ -293,7 +294,8 @@ const App = () => {
         status: Math.random() > 0.25 ? "won" : "lost",
         attempts,
         shareGrid: rows.join("\n"),
-        isPractice: false
+        isPractice: false,
+        completedAt: `${dateKeyForEntry}T12:00:00.000Z`
       });
     }
 
@@ -373,14 +375,15 @@ const App = () => {
     setStatus(nextStatus);
     if (nextStatus !== "playing") {
       const shareGrid = formatShareGrid(nextGuesses);
-      const entryDateKey =
-        mode === "practice" ? new Date().toISOString() : dateKey;
+      const completedAt = new Date().toISOString();
+      const entryDateKey = mode === "practice" ? completedAt : dateKey;
       const nextEntry: HistoryEntry = {
         dateKey: entryDateKey,
         status: nextStatus,
         attempts: nextGuesses.length,
         shareGrid,
-        isPractice: mode === "practice"
+        isPractice: mode === "practice",
+        completedAt
       };
       setHistoryEntries(upsertHistoryEntry(nextEntry));
     }
